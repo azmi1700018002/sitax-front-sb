@@ -37,7 +37,7 @@ if (isset($data["data"])) {
         echo '<td>
         <div class="d-flex justify-content-center">
 
-        <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deleteMenu' .
+        <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteMenu' .
             $menu["MenuID"] .
             '"><i class="fas fa-trash"></i> </button>
           <div class="modal fade" id="deleteMenu' .
@@ -46,8 +46,9 @@ if (isset($data["data"])) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteMenu">Modal title</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="deleteMenu">Delete Menu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+        aria-hidden="true">×</span></button>
       </div>
       <div class="modal-body">Apakah yakin ingin menghapus data menu ini ?</div>
      
@@ -63,7 +64,7 @@ if (isset($data["data"])) {
     </div>
   </div>
 </div>  
-        <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editMenu' .
+        <button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editMenu' .
             $menu["MenuID"] .
             '">  <i class="fas fa-edit"></i> </button>
         <div class="modal fade" id="editMenu' .
@@ -73,7 +74,8 @@ if (isset($data["data"])) {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ediMenu">Edit menu</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                    aria-hidden="true">×</span></button>
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="../actions/menu/put_menu.php" enctype="multipart/form-data">
@@ -191,7 +193,7 @@ if (isset($data["data"])) {
     <div class="modal-dialog">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="deleteMenu">Modal title</h5>
+            <h5 class="modal-title" id="deleteMenu">Delete Menu</h5>
             <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">Apakah yakin ingin menghapus data menu ini?</div>

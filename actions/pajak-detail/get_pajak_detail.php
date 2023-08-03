@@ -33,7 +33,7 @@ if (isset($data["data"])) {
         echo "<td class='text-center'>" . $pajak_detail["Keterangan"] . "</td>";
         echo '<td>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajakDetail' .
+            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajakDetail' .
             $pajak_detail["PajakDetailID"] .
             '"><i class="fas fa-trash"></i> </button>
             <div class="modal fade" id="deletePajakDetail' .
@@ -42,7 +42,7 @@ if (isset($data["data"])) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deletePajakDetail">Modal title</h5>
+        <h5 class="modal-title" id="deletePajakDetail">Delete Detail Pajak</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
         aria-hidden="true">×</span></button>
       </div>
@@ -60,7 +60,7 @@ if (isset($data["data"])) {
     </div>
     </div>
     </div>
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editPajakDetail' .
+            <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPajakDetail' .
             $pajak_detail["PajakDetailID"] .
             '">  <i class="fas fa-edit"></i> </button>
             <div class="modal fade" id="editPajakDetail' .

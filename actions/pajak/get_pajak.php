@@ -33,7 +33,7 @@ if (isset($data["data"])) {
         echo "<td class='text-center'>" . $pajak["FileID"] . "</td>";
         echo '<td>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
+            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
             $pajak["PajakID"] .
             '"><i class="fas fa-trash"></i> </button>
             <div class="modal fade" id="deletePajak' .
@@ -60,7 +60,7 @@ if (isset($data["data"])) {
     </div>
     </div>
     </div>
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
+            <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
             $pajak["PajakID"] .
             '">  <i class="fas fa-edit"></i> </button>
             <div class="modal fade" id="editPajak' .

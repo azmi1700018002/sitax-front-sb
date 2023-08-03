@@ -1,10 +1,10 @@
 <?php
 require_once("../config/server.php");
 
-// Mendapatkan UserID dari session (asumsikan UserID tersimpan dalam $_SESSION['UserID'])
+// Mendapatkan Username dari session (asumsikan Username tersimpan dalam $_SESSION['Username'])
 $username = $_SESSION["Username"];
 
-// Membentuk URL API dengan UserID yang spesifik
+// Membentuk URL API dengan Username yang spesifik
 $url = $baseUrl . "auth/users/" . $username;
 
 // Menggunakan cURL
@@ -28,41 +28,45 @@ if ($user === null) {
 } else {
     // Menampilkan data pengguna
     echo '
+    <div class="container">
+    <div class="row">
     <div class="col-xs-12 col-sm-9 offset-sm-1">
-        <form class="form-horizontal" action="../pages/form-edit-profile.php" method="POST">
-            <div class="card mx-auto" style="max-width: 400px;">
-                <div class="card-body text-center">
-                    <div class="card-header">
-                        <h4 class="card-title text-center">My Profile</h4>
-                    </div>
-                    <img src="../assets/img/profile/' .
+            <form class="form-horizontal" action="../pages/form-edit-profile.php" method="POST">
+                <div class="card mx-auto" style="max-width: 400px;">
+                    <div class="card-body text-center">
+                        <div class="card-header">
+                            <h4 class="card-title text-center">My Profile</h4>
+                        </div>
+                        <div class="card-body text-center">
+                        <img src="../assets/img/profile/' .
         $user["ProfilePicture"] .
-        '" class="rounded-circle img-fluid"
-                        alt="User avatar">
-                </div>
-            </div>
-            <div class="card mx-auto" style="max-width: 400px;">
-                <div class="card-body">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="basic-addon1">Username</span>
-                        <input type="text" class="form-control" value="' .
-        $user["Username"] .
-        '" aria-label="Username" aria-describedby="basic-addon1" readonly />
+        '" class="img-fluid"
+                        alt="User avatar" ></img>
                     </div>
-    <div class="input-group mb-3">
-    <span class="input-group-text" id="basic-addon1">Email</span>
-    <input type="text" class="form-control" value="' .
+                
+                    <div class="card-body">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Nama Lengkap</span>
+                            <input type="text" class="form-control" value="' .
+        $user["NamaLengkap"] .
+        '" aria-label="NamaLengkap" aria-describedby="basic-addon1" readonly />
+                        </div>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" id="basic-addon1">Email</span>
+                            <input type="text" class="form-control" value="' .
         $user["Email"] .
         '" aria-label="Email"
         aria-describedby="basic-addon1" readonly />
+                        </div>
+                    </div>
+                    <div class="card-footer text-center">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-pen me-2"></i>Edit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-    </div>
-    <div class="card-footer text-center">
-    <button type="submit" class="btn btn-primary"><i class="fas fa-pen me-2"></i>Edit</button>
-    </div>
-    </div>
-    </form>
-    </div>
-    </div>';
+</div>
+';
 }
 ?>

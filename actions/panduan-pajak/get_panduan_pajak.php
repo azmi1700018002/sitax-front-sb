@@ -125,7 +125,7 @@ if (isset($data['data']) && is_array($data['data'])) {
 
         echo '</div>';
         // Delete Button
-        echo '<button type="button" class="btn btn-danger btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
+        echo '<button type="button" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
         echo '<i class="fas fa-trash"></i>';
         echo '</button>';
         echo '<div class="modal fade" id="deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="deletePanduanPajak" aria-hidden="true">';

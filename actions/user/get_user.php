@@ -70,7 +70,7 @@ if (isset($data2["data"])) {
             }
             echo '<td>
             <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deleteUser' .
+            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteUser' .
                 $user["Username"] .
                 '"><i class="fas fa-trash"></i> </button>
           <div class="modal fade" id="deleteUser' .
@@ -98,7 +98,7 @@ if (isset($data2["data"])) {
     </div>
     </div>  
     
-                <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editUser' .
+                <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editUser' .
                 $user["Username"] .
                 '">  <i class="fas fa-edit"></i> </button>
                 <div class="modal fade" id="editUser' .

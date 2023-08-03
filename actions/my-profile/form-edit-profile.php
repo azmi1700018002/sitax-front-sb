@@ -1,13 +1,13 @@
 <?php
 require_once("../config/server.php");
 
-if (!isset($_SESSION["UserID"])) {
-    echo "UserID tidak tersedia dalam sesi.";
+if (!isset($_SESSION["Username"])) {
+    echo "Username tidak tersedia dalam sesi.";
     exit();
 }
 
-$id_user = $_SESSION["UserID"];
-$url = $baseUrl . "auth/users/" . $id_user;
+$username = $_SESSION["Username"];
+$url = $baseUrl . "auth/users/" . $username;
 $token = "Bearer " . $_SESSION["token"];
 
 $curl = curl_init();
@@ -31,11 +31,13 @@ if ($user === null) {
                     <div class="card-header">
                         <h4 class="card-title text-center">My Profile</h4>
                     </div>
-                    <img src="' .
+                    <div class="card-body text-center">
+                        <img src="../assets/img/profile/' .
         $user["ProfilePicture"] .
-        '" class="rounded-circle img-fluid" alt="User avatar">
-                </div>
-            </div>
+        '" class="img-fluid"
+                        alt="User avatar" ></img>
+                    </div>
+        
             <div class="card mx-auto" style="max-width: 400px;">
                 <div class="card-body">
                     <div class="input-group mb-3">
@@ -50,8 +52,8 @@ if ($user === null) {
                         <span class="input-group-text" id="basic-addon1">Password</span>
                         <input type="password" class="form-control" name="Password" placeholder="Masukkan password baru" aria-label="Password" aria-describedby="basic-addon1" required />
                     </div>
-                    <input type="hidden" name="UserID" value="' .
-        $user["UserID"] .
+                    <input type="hidden" name="Username" value="' .
+        $user["Username"] .
         '">
     </div>
     <div class="card-footer text-center">

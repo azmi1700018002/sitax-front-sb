@@ -64,13 +64,15 @@ if (isset($data2["data"])) {
       echo "<td class='text-center'>" . $file["FileDate"] . "</td>";
       // Tambahkan kondisi untuk menampilkan keterangan "Ket" berdasarkan "StsUser"
       if (isset($jnsFile[$file["FileJenis"]])) {
-        echo "<td class='text-center'>" . $jnsFile[$file["FileJenis"]] . "</td>";
+        echo "<td class='text-center'>" .
+          $jnsFile[$file["FileJenis"]] .
+          "</td>";
       } else {
         echo "<td class='text-center'>Tidak Diketahui</td>"; // Tampilkan pesan jika tidak ada keterangan yang sesuai
       }
       echo '<td>
     <div class="d-flex justify-content-center">
-    <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deleteFile' .
+    <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteFile' .
         $file["FileID"] .
         '"><i class="fas fa-trash"></i> </button>
     <div class="modal fade" id="deleteFile' .
@@ -97,7 +99,7 @@ if (isset($data2["data"])) {
 </div>
 </div>
 </div> 
-<button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editFile' .
+<button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editFile' .
         $file["FileID"] .
         '">  <i class="fas fa-edit"></i> </button>
     <div class="modal fade" id="editFile' .
@@ -152,7 +154,7 @@ if (isset($data2["data"])) {
           $ref = $referensi["Ref"];
           $keterangan = $referensi["Ket"];
           // Check if the current option's "GrpID" matches the user's "ref"
-          $selected = ($ref === $currentUserStsUser) ? 'selected' : '';
+          $selected = $ref === $currentUserStsUser ? "selected" : "";
           echo "<option value='$ref' $selected>$keterangan</option>";
         }
       }

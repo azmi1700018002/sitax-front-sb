@@ -11,8 +11,7 @@
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
-                <h3>Master Transaksi Pajak</h3>
-                <p>data yang ditampilkan</p>
+
                 <div style="width: 100%; height: 700px" id="tree"></div>
                 <script>
                     fetch(

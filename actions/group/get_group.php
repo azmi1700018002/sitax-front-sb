@@ -29,7 +29,7 @@ if (isset($data["data"])) {
         echo "<td class='text-center'>" . $group["GroupDeskripsi"] . "</td>";
         echo '<td>
         <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-danger" data-ripple-color="dark" data-toggle="modal" data-target="#deleteGroup' .
+            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteGroup' .
             $group["GroupID"] .
             '"><i class="fas fa-trash"></i> </button>
             <div class="modal fade" id="deleteGroup' .
@@ -38,8 +38,9 @@ if (isset($data["data"])) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteGroup">Modal title</h5>
-        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title" id="deleteGroup">Delete Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+        aria-hidden="true">×</span></button>
       </div>
       <div class="modal-body">Apakah yakin ingin menghapus data group ini?</div>
      
@@ -55,7 +56,7 @@ if (isset($data["data"])) {
     </div>
     </div>
     </div>
-            <button type="submit" class="btn btn-link btn-rounded btn-sm fw-bold text-warning" data-ripple-color="dark" data-toggle="modal" data-target="#editGroup' .
+            <button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editGroup' .
             $group["GroupID"] .
             '">  <i class="fas fa-edit"></i> </button>
             <div class="modal fade" id="editGroup' .
@@ -65,7 +66,8 @@ if (isset($data["data"])) {
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editGroup">Edit group</h5>
-                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
                     </div>
                     <div class="modal-body">
                         <form method="POST" action="../actions/group/put_group.php" enctype="multipart/form-data">
@@ -98,7 +100,7 @@ if (isset($data["data"])) {
     
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Edit</button>
+                        <button type="submit" class="btn btn-primary">Edit</button>
                     </div>
                     </form>
                 </div>

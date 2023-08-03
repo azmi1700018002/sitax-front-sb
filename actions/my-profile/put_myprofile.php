@@ -3,12 +3,12 @@ require_once("../../config/server.php");
 
 session_start();
 
-if (!isset($_SESSION["UserID"])) {
-    echo "UserID tidak tersedia dalam sesi.";
+if (!isset($_SESSION["Username"])) {
+    echo "Username tidak tersedia dalam sesi.";
     exit();
 }
 
-$id_user = $_SESSION["UserID"];
+$id_user = $_SESSION["Username"];
 $url = $baseUrl . "auth/users/" . $id_user;
 $token = "Bearer " . $_SESSION["token"];
 
