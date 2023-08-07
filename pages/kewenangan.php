@@ -3,29 +3,29 @@
 
 <!-- Sweet Alert Success kewenangan -->
 <?php if (isset($_SESSION["message_kewenangan_success"])) { ?>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: '<?php echo $_SESSION["message_kewenangan_success"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_kewenangan_success"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $_SESSION["message_kewenangan_success"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_kewenangan_success"]); ?>
 
 <?php } ?>
 
 <!-- Sweet Alert Faield kewenangan -->
 <?php if (isset($_SESSION["message_kewenangan_failed"])) { ?>
-<script>
-Swal.fire({
-    icon: 'error',
-    title: '<?php echo $_SESSION["message_kewenangan_failed"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_kewenangan_failed"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '<?php echo $_SESSION["message_kewenangan_failed"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_kewenangan_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -41,7 +41,11 @@ Swal.fire({
 
 
                 <h3>Kewenangan</h3>
-                <p>data tampilan kewenangan</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Data Yang ditampilkan</li>
+                    </ol>
+                </nav>
                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahKewenangan">
                     <i class="fas fa-plus me-2"></i>
@@ -229,45 +233,45 @@ Swal.fire({
 
     <!-- limit textarea form tambah -->
     <script>
-    $(document).ready(function() {
-        $('#limittambahDeskripsi').on('input propertychange', function() {
-            charLimitTambah(this, 50);
+        $(document).ready(func tion() {
+            $('#limittambahDeskripsi').on('input propertychange', func tion() {
+                charLimitTambah(this, 50);
+            });
         });
-    });
 
-    function charLimitTambah(input, maxChar) {
-        var len = $(input).val().length;
-        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+        function charLimitTambah(input, maxChar) {
+            var len = $(input).val().length;
+            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-        if (len > maxChar) {
-            $(input).val($(input).val().substring(0, maxChar));
-            $('#textCounterTambah').text('0 karakter tersisa');
-        } else {
-            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+            if (len > maxChar) {
+                $(input).val($(input).val().substring(0, maxChar));
+                $('#textCounterTambah').text('0 karakter tersisa');
+            } else {
+                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+            }
         }
-    }
     </script>
 
     <!-- limit textarea form edit -->
     <script>
-    $(document).ready(function() {
-        $('.editDeskripsi').on('input propertychange', function() {
-            charLimit(this, 50);
+        $(document).ready(func tion() {
+            $('.editDeskripsi').on('input propertychange', func tion() {
+                charLimit(this, 50);
+            });
         });
-    });
 
-    function charLimit(input, maxChar) {
-        var len = $(input).val().length;
-        var counter = $(input).closest('.modal-body').find('.charNum');
-        counter.text(len + ' dari ' + maxChar + ' karakter');
+        function charLimit(input, maxChar) {
+            var len = $(input).val().length;
+            var counter = $(input).closest('.modal-body').find('.charNum');
+            counter.text(len + ' dari ' + maxChar + ' karakter');
 
-        if (len > maxChar) {
-            $(input).val($(input).val().substring(0, maxChar));
-            counter.text('0 karakter tersisa');
-        } else {
-            counter.text(maxChar - len + ' karakter tersisa');
+            if (len > maxChar) {
+                $(input).val($(input).val().substring(0, maxChar));
+                counter.text('0 karakter tersisa');
+            } else {
+                counter.text(maxChar - len + ' karakter tersisa');
+            }
         }
-    }
     </script>
 
     <?php include('../includes/footer.php'); ?>

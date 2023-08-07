@@ -21,6 +21,16 @@
 <!-- Page level custom scripts -->
 <script src="../assets/js/demo/datatables-demo.js"></script>
 
+<!-- Footer -->
+<!-- <footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; PT. Bank BPD DIY 2023</span>
+        </div>
+    </div>
+</footer> -->
+<!-- End of Footer -->
+
 </body>
 
 </html>

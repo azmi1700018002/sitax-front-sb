@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success PanduanPajak -->
 <?php if (isset($_SESSION["message_panduan_pajak_success"])) { ?>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: '<?php echo $_SESSION["message_panduan_pajak_success"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_panduan_pajak_success"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $_SESSION["message_panduan_pajak_success"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_panduan_pajak_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield PanduanPajak -->
 <?php if (isset($_SESSION["message_panduan_pajak_failed"])) { ?>
-<script>
-Swal.fire({
-    icon: 'error',
-    title: '<?php echo $_SESSION["message_panduan_pajak_failed"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_panduan_pajak_failed"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '<?php echo $_SESSION["message_panduan_pajak_failed"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_panduan_pajak_failed"]); ?>
 <?php } ?>
 
 
@@ -38,7 +38,12 @@ Swal.fire({
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <!-- Page Heading -->
-                <h3 class="mb-3">Panduan Pajak</h3>
+                <h3 class="mb-3">Panduan Pajak PT. Bank BPD DIY</h3>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
+                    </ol>
+                </nav>
                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahPanduanPajak">
                     <i class="fas fa-plus me-2"></i>
@@ -46,7 +51,6 @@ Swal.fire({
                 </button>
 
                 <div class="container mt-4">
-                    <h2>PANDUAN PAJAK BANK BPD JOGJA</h2>
                     <?php include "../actions/panduan-pajak/get_panduan_pajak.php"; ?>
                 </div>
 
@@ -196,51 +200,51 @@ Swal.fire({
                     </div>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
-                    $(document).ready(function() {
-                        // Fungsi untuk menampilkan modal dengan PDF
-                        function showPDFModal(pdfURL, namaPanduanPajak) {
-                            var modalTitle = document.getElementById('pdfModalLabel');
-                            var modalBody = document.getElementById('pdfModalBody');
+                        $(document).ready(function () {
+                            // Fungsi untuk menampilkan modal dengan PDF
+                            function showPDFModal(pdfURL, namaPanduanPajak) {
+                                var modalTitle = document.getElementById('pdfModalLabel');
+                                var modalBody = document.getElementById('pdfModalBody');
 
-                            // Set the title of the modal to include the "NamaPanduanPajak"
-                            modalTitle.textContent = 'File PDF: ' + namaPanduanPajak;
+                                // Set the title of the modal to include the "NamaPanduanPajak"
+                                modalTitle.textContent = 'File PDF: ' + namaPanduanPajak;
 
-                            var pdfIframe = document.createElement('iframe');
-                            pdfIframe.src = pdfURL;
-                            pdfIframe.width = '100%';
-                            pdfIframe.height = '500';
-                            pdfIframe.frameBorder = '0';
+                                var pdfIframe = document.createElement('iframe');
+                                pdfIframe.src = pdfURL;
+                                pdfIframe.width = '100%';
+                                pdfIframe.height = '500';
+                                pdfIframe.frameBorder = '0';
 
-                            modalBody.innerHTML = '';
-                            modalBody.appendChild(pdfIframe);
+                                modalBody.innerHTML = '';
+                                modalBody.appendChild(pdfIframe);
 
-                            $('#pdfModal').modal('show');
-                        }
-
-                        // Menggunakan AJAX untuk mencari file saat tombol "Buka" diklik
-                        $('.btn-primary').click(function(e) {
-                            e.preventDefault();
-                            var fileID = $(this).data('fileid');
-                            var namaPanduanPajak = $(this).data(
-                                'filejudul'); // Correctly retrieve "NamaPanduanPajak" value
-                            var pdfURL = getPDFURL(fileID);
-                            showPDFModal(pdfURL,
-                                namaPanduanPajak); // Pass the "NamaPanduanPajak" value to the function
-                        });
-
-                        // Fungsi untuk mendapatkan URL PDF berdasarkan FileID
-                        function getPDFURL(fileID) {
-                            var fileData = <?php echo json_encode($data['data']); ?>;
-                            var pdfURL = '';
-                            for (var i = 0; i < fileData.length; i++) {
-                                if (fileData[i]['FileID'] === fileID) {
-                                    pdfURL = '../../Sitax/file/' + fileData[i]['FileJudul'];
-                                    break;
-                                }
+                                $('#pdfModal').modal('show');
                             }
-                            return pdfURL;
-                        }
-                    });
+
+                            // Menggunakan AJAX untuk mencari file saat tombol "Buka" diklik
+                            $('.btn-primary').click(function (e) {
+                                e.preventDefault();
+                                var fileID = $(this).data('fileid');
+                                var namaPanduanPajak = $(this).data(
+                                    'filejudul'); // Correctly retrieve "NamaPanduanPajak" value
+                                var pdfURL = getPDFURL(fileID);
+                                showPDFModal(pdfURL,
+                                    namaPanduanPajak); // Pass the "NamaPanduanPajak" value to the function
+                            });
+
+                            // Fungsi untuk mendapatkan URL PDF berdasarkan FileID
+                            function getPDFURL(fileID) {
+                                var fileData = <?php echo json_encode($data['data']); ?>;
+                                var pdfURL = '';
+                                for (var i = 0; i < fileData.length; i++) {
+                                    if (fileData[i]['FileID'] === fileID) {
+                                        pdfURL = '../../Sitax/file/' + fileData[i]['FileJudul'];
+                                        break;
+                                    }
+                                }
+                                return pdfURL;
+                            }
+                        });
                     </script>
 
                 </div>

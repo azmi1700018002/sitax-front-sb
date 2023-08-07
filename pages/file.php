@@ -39,7 +39,11 @@
                 <!-- Page Heading -->
 
                 <h3>File</h3>
-                <p>data tampilan file</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
+                    </ol>
+                </nav>
                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahFile">
                     <i class="fas fa-plus me-2"></i>

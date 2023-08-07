@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success Pajak -->
 <?php if (isset($_SESSION["message_pajak_success"])) { ?>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: '<?php echo $_SESSION["message_pajak_success"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_pajak_success"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $_SESSION["message_pajak_success"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_pajak_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield Pajak -->
 <?php if (isset($_SESSION["message_pajak_failed"])) { ?>
-<script>
-Swal.fire({
-    icon: 'error',
-    title: '<?php echo $_SESSION["message_pajak_failed"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_pajak_failed"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '<?php echo $_SESSION["message_pajak_failed"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_pajak_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -37,7 +37,11 @@ Swal.fire({
             <!-- Begin Page Content -->
             <div class="container-fluid">
                 <h3>Pajak</h3>
-                <p>data tampilan pajak</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
+                    </ol>
+                </nav>
                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahPajak">
                     <i class="fas fa-plus me-2"></i>
@@ -121,12 +125,20 @@ Swal.fire({
                                             </div>
                                         </div>
 
+                                        <div class="mb-3">
+                                            <label class="form-label" for="PajakID">ID Pajak : </label>
+                                            <div class="form-outline">
+                                                <input type="text" id="PajakID" name="PajakID" class="form-control"
+                                                    required />
+                                            </div>
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="PajakID">ID Pajak : </label>
+                                                    <label class="form-label" for="NamaHeader">Nama Header : </label>
                                                     <div class="form-outline">
-                                                        <input type="text" id="PajakID" name="PajakID"
+                                                        <input type="text" id="NamaHeader" name="NamaHeader"
                                                             class="form-control" required />
                                                     </div>
                                                 </div>
@@ -195,66 +207,66 @@ Swal.fire({
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <!-- limit textarea form tambah -->
                     <script>
-                    $(document).ready(function() {
-                        $('#limittambahDeskripsi').on('input propertychange', function() {
-                            charLimitTambah(this, 50);
+                        $(document).ready(function () {
+                            $('#limittambahDeskripsi').on('input propertychange', function () {
+                                charLimitTambah(this, 50);
+                            });
                         });
-                    });
 
-                    function charLimitTambah(input, maxChar) {
-                        var len = $(input).val().length;
-                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                        function charLimitTambah(input, maxChar) {
+                            var len = $(input).val().length;
+                            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            $('#textCounterTambah').text('0 karakter tersisa');
-                        } else {
-                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+                            if (len > maxChar) {
+                                $(input).val($(input).val().substring(0, maxChar));
+                                $('#textCounterTambah').text('0 karakter tersisa');
+                            } else {
+                                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+                            }
                         }
-                    }
                     </script>
 
                     <!-- limit textarea form edit -->
                     <script>
-                    $(document).ready(function() {
-                        $('.editDeskripsi').on('input propertychange', function() {
-                            charLimit(this, 50);
+                        $(document).ready(function () {
+                            $('.editDeskripsi').on('input propertychange', function () {
+                                charLimit(this, 50);
+                            });
                         });
-                    });
 
-                    function charLimit(input, maxChar) {
-                        var len = $(input).val().length;
-                        var counter = $(input).closest('.modal-body').find('.charNum');
-                        counter.text(len + ' dari ' + maxChar + ' karakter');
+                        function charLimit(input, maxChar) {
+                            var len = $(input).val().length;
+                            var counter = $(input).closest('.modal-body').find('.charNum');
+                            counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            counter.text('0 karakter tersisa');
-                        } else {
-                            counter.text(maxChar - len + ' karakter tersisa');
+                            if (len > maxChar) {
+                                $(input).val($(input).val().substring(0, maxChar));
+                                counter.text('0 karakter tersisa');
+                            } else {
+                                counter.text(maxChar - len + ' karakter tersisa');
+                            }
                         }
-                    }
                     </script>
 
                     <!-- Di bagian head atau sebelum akhir </body> -->
                     <script>
-                    $(document).ready(function() {
-                        // Fungsi untuk menampilkan detail pajak berdasarkan ID
-                        function showPajakDetail(pajak_id) {
-                            // Ganti localhost:3000 dengan URL API yang sesuai jika perlu
-                            var api_url = "http://localhost:3000/pubpajak_detail/" + pajak_id;
-                            $.ajax({
-                                url: api_url,
-                                method: "GET",
-                                crossDomain: true,
-                                dataType: "json",
-                                success: function(data) {
-                                    // Tampilkan data detail pajak di sini, misalnya dengan SweetAlert atau modal
-                                    // Contoh menggunakan SweetAlert:
-                                    Swal.fire({
-                                        icon: 'info',
-                                        title: 'Detail Pajak',
-                                        html: `
+                        $(document).ready(function () {
+                            // Fungsi untuk menampilkan detail pajak berdasarkan ID
+                            function showPajakDetail(pajak_id) {
+                                // Ganti localhost:3000 dengan URL API yang sesuai jika perlu
+                                var api_url = "http://localhost:3000/pubpajak_detail/" + pajak_id;
+                                $.ajax({
+                                    url: api_url,
+                                    method: "GET",
+                                    crossDomain: true,
+                                    dataType: "json",
+                                    success: function (data) {
+                                        // Tampilkan data detail pajak di sini, misalnya dengan SweetAlert atau modal
+                                        // Contoh menggunakan SweetAlert:
+                                        Swal.fire({
+                                            icon: 'info',
+                                            title: 'Detail Pajak',
+                                            html: `
                         <pre>
                         <div class="row">
                             <div class="col-sm-4"><strong>Nama Pajak</strong></div>
@@ -293,25 +305,25 @@ Swal.fire({
                         </div>
                     </pre>
                 `,
-                                    });
-                                },
-                                error: function() {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'Terjadi kesalahan saat mengambil data pajak.',
-                                    });
-                                },
-                            });
-                        }
+                                        });
+                                    },
+                                    error: function () {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Terjadi kesalahan saat mengambil data pajak.',
+                                        });
+                                    },
+                                });
+                            }
 
-                        // Fungsi untuk menangani klik pada NamaPajak
-                        $(document).on('click', '.namaPajakLink', function(e) {
-                            e.preventDefault();
-                            var pajak_id = $(this).data('pajakid');
-                            showPajakDetail(pajak_id);
+                            // Fungsi untuk menangani klik pada NamaPajak
+                            $(document).on('click', '.namaPajakLink', function (e) {
+                                e.preventDefault();
+                                var pajak_id = $(this).data('pajakid');
+                                showPajakDetail(pajak_id);
+                            });
                         });
-                    });
                     </script>
 
 

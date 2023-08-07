@@ -49,12 +49,19 @@
 
             <div class="col-xl-10 col-lg-12 col-md-9">
 
-
                 <div class="card o-hidden border-0 shadow-lg my-5">
                     <div class="card-body p-0">
                         <!-- Nested Row within Card Body -->
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                        <div class="row justify-content-center align-items-center">
+                            <!-- Perubahan di sini -->
+                            <div class="col-lg-6 d-none d-lg-block ">
+                                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js">
+                                </script>
+                                <lottie-player
+                                    src="https://lottie.host/48d8508b-f704-41ba-a94e-7ba9155bff5b/FScVz8Vpkl.json"
+                                    background="#fff" speed="1" style="width: 400px; height: 400px" loop autoplay
+                                    direction="1" mode="normal"></lottie-player>
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">

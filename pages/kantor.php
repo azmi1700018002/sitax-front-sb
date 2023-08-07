@@ -38,7 +38,11 @@
             <div class="container-fluid">
                 <!-- Page Heading -->
                 <h3>Kantor</h3>
-                <p>data tampilan kantor</p>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
+                    </ol>
+                </nav>
                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahKantor">
                     <i class="fas fa-plus me-2"></i>
@@ -310,5 +314,6 @@
                 </script>
             </div>
         </div>
+        <?php include('../includes/footer.php'); ?>
     </div>
-    <?php include('../includes/footer.php'); ?>
+</div>

@@ -17,6 +17,7 @@ $headers = ["Authorization: " . $token];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $PajakID = $_POST["PajakID"];
+    $NamaHeader = $_POST["NamaHeader"];
     $NamaPajak = $_POST["NamaPajak"];
     $ParentPajak = $_POST["ParentPajak"];
     $StsPajak = $_POST["StsPajak"];
@@ -26,6 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $post_data = [
         "PajakID" => $PajakID,
+        "NamaHeader" => $NamaHeader,
         "NamaPajak" => $NamaPajak,
         "ParentPajak" => $ParentPajak,
         "StsPajak" => $StsPajak,
