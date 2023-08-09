@@ -63,7 +63,7 @@ if (isset($filteredData) && is_array($filteredData)) {
         echo '<div class="btn-group" role="group">';
 
         // Eye Icon for "Buka"
-        echo '<a href="#" class="btn btn-primary btn-sm" data-fileid="' . $panduanPjk['FileID'] . '" data-filejudul=\'' . $panduanPjk['NamaPanduanPajak'] . '\'>';
+        echo '<a href="#" class="pdfopen btn btn-primary btn-sm" data-fileid="' . $panduanPjk['FileID'] . '" data-filejudul=\'' . $panduanPjk['NamaPanduanPajak'] . '\'>';
         echo '<i class="far fa-eye"></i>';
         echo '</a>';
 
