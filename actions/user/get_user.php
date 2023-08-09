@@ -193,9 +193,9 @@ if (isset($data2["data"])) {
             $nomor++;
         }
     } else {
-        echo '<div class="alert alert-warning" role="alert">Tidak ada data user</div>';
+        echo '<div class="alert alert-warning" role="alert">Tidak ada data referensi</div>';
     }
 } else {
-    echo '<div class="alert alert-warning" role="alert">Tidak ada data referensi</div>';
+    echo '<div class="alert alert-warning" role="alert">Tidak ada data user</div>';
 }
 ?>

@@ -181,7 +181,7 @@ if (isset($data2["data"])) {
             foreach ($data2["data"] as $file) {
                 $fileID = $file["FileID"];
                 $fileJudul = $file["FileJudul"];
-                $selected = $fileID === $currentUserStsUser ? "selected" : "";
+                $selected = $fileID === $currentFileUser ? "selected" : "";
                 echo "<option value='$fileID' $selected>$fileJudul</option>";
             }
             echo '</select>
