@@ -169,10 +169,15 @@
 
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="StsPajak">Sts Pajak : </label>
-                                                    <div class="form-outline">
-                                                        <input type="text" id="StsPajak" name="StsPajak"
-                                                            class="form-control" required />
+                                                    <div class="form-group">
+                                                        <label for="StsPajak">Status Pajak :</label>
+                                                        <div class="input-group">
+                                                            <select class="form-control" name="StsPajak"
+                                                                aria-label="Default select example">
+                                                                <option value='0'>Tidak Ditampilkan</option>
+                                                                <option value='1'>Ditampilkan</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -325,9 +330,10 @@
                             });
                         });
                     </script>
-
-
                 </div>
             </div>
         </div>
         <?php include('../includes/footer.php'); ?>
+        </body>
+
+        </html>

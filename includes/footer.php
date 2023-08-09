@@ -19,18 +19,22 @@
 <script src="../assets/js/demo/chart-area-demo.js"></script>
 <script src="../assets/js/demo/chart-pie-demo.js"></script>
 <!-- Page level custom scripts -->
-<script src="../assets/js/demo/datatables-demo.js"></script>
+<!-- <script src="../assets/js/demo/datatables-demo.js"></script> -->
+<script>
+    $(document).ready(function () {
+        $("#dataTable").DataTable({
+            fixedHeader: true, // Ini akan mengaktifkan fixed header
+            scrollX: true, // Ini akan mengaktifkan horizontal scrolling
+        });
+    });
+</script>
 
 <!-- Footer -->
-<!-- <footer class="sticky-footer bg-white">
+<footer class="sticky-footer bg-white">
     <div class="container my-auto">
         <div class="copyright text-center my-auto">
             <span>Copyright &copy; PT. Bank BPD DIY 2023</span>
         </div>
     </div>
-</footer> -->
+</footer>
 <!-- End of Footer -->
-
-</body>
-
-</html>

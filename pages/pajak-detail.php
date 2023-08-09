@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success Pajak Detail -->
 <?php if (isset($_SESSION["message_pajak_detail_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_pajak_detail_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_pajak_detail_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_pajak_detail_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_pajak_detail_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield Pajak Detail -->
 <?php if (isset($_SESSION["message_pajak_detail_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_pajak_detail_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_pajak_detail_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_pajak_detail_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_pajak_detail_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -144,6 +144,9 @@
                                                         <input type="text" id="Ppn" name="Ppn" class="form-control"
                                                             required />
                                                     </div>
+                                                    <small class="form-text text-muted">
+                                                        contoh : <span>1.0</span> <strong>gunakan titik !!</strong>
+                                                    </small>
                                                 </div>
                                             </div>
 
@@ -154,6 +157,9 @@
                                                         <input type="text" id="PphFinal" name="PphFinal"
                                                             class="form-control" required />
                                                     </div>
+                                                    <small class="form-text text-muted">
+                                                        contoh : <span>1.0</span> <strong>gunakan titik !!</strong>
+                                                    </small>
                                                 </div>
                                             </div>
                                         </div>
@@ -172,6 +178,9 @@
                                                 <input type="text" id="PajakLain" name="PajakLain" class="form-control"
                                                     required />
                                             </div>
+                                            <small class="form-text text-muted">
+                                                contoh : <span>1.0</span> <strong>gunakan titik !!</strong>
+                                            </small>
                                         </div>
 
                                         <div class="mb-3">
@@ -195,45 +204,45 @@
 
                     <!-- limit textarea form tambah -->
                     <script>
-                        $(document).ready(function () {
-                            $('#limittambahDeskripsi').on('input propertychange', function () {
-                                charLimitTambah(this, 50);
-                            });
+                    $(document).ready(function() {
+                        $('#limittambahDeskripsi').on('input propertychange', function() {
+                            charLimitTambah(this, 50);
                         });
+                    });
 
-                        function charLimitTambah(input, maxChar) {
-                            var len = $(input).val().length;
-                            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                    function charLimitTambah(input, maxChar) {
+                        var len = $(input).val().length;
+                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                $('#textCounterTambah').text('0 karakter tersisa');
-                            } else {
-                                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-                            }
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            $('#textCounterTambah').text('0 karakter tersisa');
+                        } else {
+                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
                         }
+                    }
                     </script>
 
                     <!-- limit textarea form edit -->
                     <script>
-                        $(document).ready(function () {
-                            $('.editDeskripsi').on('input propertychange', function () {
-                                charLimit(this, 50);
-                            });
+                    $(document).ready(function() {
+                        $('.editDeskripsi').on('input propertychange', function() {
+                            charLimit(this, 50);
                         });
+                    });
 
-                        function charLimit(input, maxChar) {
-                            var len = $(input).val().length;
-                            var counter = $(input).closest('.modal-body').find('.charNum');
-                            counter.text(len + ' dari ' + maxChar + ' karakter');
+                    function charLimit(input, maxChar) {
+                        var len = $(input).val().length;
+                        var counter = $(input).closest('.modal-body').find('.charNum');
+                        counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                counter.text('0 karakter tersisa');
-                            } else {
-                                counter.text(maxChar - len + ' karakter tersisa');
-                            }
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            counter.text('0 karakter tersisa');
+                        } else {
+                            counter.text(maxChar - len + ' karakter tersisa');
                         }
+                    }
                     </script>
 
 
@@ -242,3 +251,6 @@
             </div>
         </div>
         <?php include('../includes/footer.php'); ?>
+        </body>
+
+        </html>

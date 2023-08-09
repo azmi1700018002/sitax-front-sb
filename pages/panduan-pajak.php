@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success PanduanPajak -->
 <?php if (isset($_SESSION["message_panduan_pajak_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_panduan_pajak_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_panduan_pajak_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_panduan_pajak_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_panduan_pajak_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield PanduanPajak -->
 <?php if (isset($_SESSION["message_panduan_pajak_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_panduan_pajak_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_panduan_pajak_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_panduan_pajak_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_panduan_pajak_failed"]); ?>
 <?php } ?>
 
 
@@ -51,7 +51,32 @@
                 </button>
 
                 <div class="container mt-4">
+
+                    <form class="form-inline" action="" method="GET">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="search"
+                                placeholder="Cari Nama Panduan Pajak...">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">Cari</button>
+                            </div>
+                        </div>
+                    </form>
+
                     <?php include "../actions/panduan-pajak/get_panduan_pajak.php"; ?>
+                    <!-- Pagination Display -->
+                    <div class="pagination justify-content-end">
+                        <ul class="pagination">
+                            <?php
+                            $totalPages = ceil($totalFilteredItems / $itemsPerPage);
+
+                            for ($page = 1; $page <= $totalPages; $page++) {
+                                echo '<li class="page-item' . ($page === $currentPage ? ' active' : '') . '">';
+                                echo '<a class="page-link" href="?page=' . $page . '">' . $page . '</a>';
+                                echo '</li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
                 </div>
 
 
@@ -139,6 +164,9 @@
                                                         <input type="text" id="PanduanPajakID" name="PanduanPajakID"
                                                             class="form-control" required />
                                                     </div>
+                                                    <small class="form-text text-muted">
+                                                        contoh : <span>1</span>
+                                                    </small>
                                                 </div>
                                             </div>
 
@@ -163,19 +191,25 @@
                                                         : </label>
                                                     <div class="form-outline">
                                                         <input type="text" id="ParentPanduanPajak"
-                                                            name="ParentPanduanPajak" class="form-control" required />
+                                                            name="ParentPanduanPajak" class="form-control" />
                                                     </div>
+                                                    <small class="form-text text-muted">
+                                                        contoh : <span>1</span> <strong>Boleh dikosongkan</strong>
+                                                    </small>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="StsPanduanPajak">Sts Panduan
-                                                        Pajak :
-                                                    </label>
-                                                    <div class="form-outline">
-                                                        <input type="text" id="StsPanduanPajak" name="StsPanduanPajak"
-                                                            class="form-control" required />
+                                                    <div class="form-group">
+                                                        <label for="StsPanduanPajak">Status Panduan Pajak :</label>
+                                                        <div class="input-group">
+                                                            <select class="form-control" name="StsPanduanPajak"
+                                                                aria-label="Default select example">
+                                                                <option value='0'>Tidak Ditampilkan</option>
+                                                                <option value='1'>Ditampilkan</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -184,9 +218,12 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="StsParent">Sts Parent : </label>
                                             <div class="form-outline">
-                                                <input type="text" id="StsParent" name="StsParent" class="form-control"
-                                                    required />
+                                                <input type="text" id="StsParent" name="StsParent"
+                                                    class="form-control" />
                                             </div>
+                                            <small class="form-text text-muted">
+                                                contoh : <span>1</span> <strong>Boleh dikosongkan</strong>
+                                            </small>
                                         </div>
 
                                     </div>
@@ -200,54 +237,56 @@
                     </div>
                     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                     <script>
-                        $(document).ready(function () {
-                            // Fungsi untuk menampilkan modal dengan PDF
-                            function showPDFModal(pdfURL, namaPanduanPajak) {
-                                var modalTitle = document.getElementById('pdfModalLabel');
-                                var modalBody = document.getElementById('pdfModalBody');
+                    $(document).ready(function() {
+                        // Fungsi untuk menampilkan modal dengan PDF
+                        function showPDFModal(pdfURL, namaPanduanPajak) {
+                            var modalTitle = document.getElementById('pdfModalLabel');
+                            var modalBody = document.getElementById('pdfModalBody');
 
-                                // Set the title of the modal to include the "NamaPanduanPajak"
-                                modalTitle.textContent = 'File PDF: ' + namaPanduanPajak;
+                            // Set the title of the modal to include the "NamaPanduanPajak"
+                            modalTitle.textContent = 'File PDF: ' + namaPanduanPajak;
 
-                                var pdfIframe = document.createElement('iframe');
-                                pdfIframe.src = pdfURL;
-                                pdfIframe.width = '100%';
-                                pdfIframe.height = '500';
-                                pdfIframe.frameBorder = '0';
+                            var pdfIframe = document.createElement('iframe');
+                            pdfIframe.src = pdfURL;
+                            pdfIframe.width = '100%';
+                            pdfIframe.height = '500';
+                            pdfIframe.frameBorder = '0';
 
-                                modalBody.innerHTML = '';
-                                modalBody.appendChild(pdfIframe);
+                            modalBody.innerHTML = '';
+                            modalBody.appendChild(pdfIframe);
 
-                                $('#pdfModal').modal('show');
-                            }
+                            $('#pdfModal').modal('show');
+                        }
 
-                            // Menggunakan AJAX untuk mencari file saat tombol "Buka" diklik
-                            $('.btn-primary').click(function (e) {
-                                e.preventDefault();
-                                var fileID = $(this).data('fileid');
-                                var namaPanduanPajak = $(this).data(
-                                    'filejudul'); // Correctly retrieve "NamaPanduanPajak" value
-                                var pdfURL = getPDFURL(fileID);
-                                showPDFModal(pdfURL,
-                                    namaPanduanPajak); // Pass the "NamaPanduanPajak" value to the function
-                            });
-
-                            // Fungsi untuk mendapatkan URL PDF berdasarkan FileID
-                            function getPDFURL(fileID) {
-                                var fileData = <?php echo json_encode($data['data']); ?>;
-                                var pdfURL = '';
-                                for (var i = 0; i < fileData.length; i++) {
-                                    if (fileData[i]['FileID'] === fileID) {
-                                        pdfURL = '../../Sitax/file/' + fileData[i]['FileJudul'];
-                                        break;
-                                    }
-                                }
-                                return pdfURL;
-                            }
+                        // Menggunakan AJAX untuk mencari file saat tombol "Buka" diklik
+                        $('.btn-primary').click(function(e) {
+                            e.preventDefault();
+                            var fileID = $(this).data('fileid');
+                            var namaPanduanPajak = $(this).data(
+                                'filejudul'); // Correctly retrieve "NamaPanduanPajak" value
+                            var pdfURL = getPDFURL(fileID);
+                            showPDFModal(pdfURL,
+                                namaPanduanPajak); // Pass the "NamaPanduanPajak" value to the function
                         });
-                    </script>
 
+                        // Fungsi untuk mendapatkan URL PDF berdasarkan FileID
+                        function getPDFURL(fileID) {
+                            var fileData = <?php echo json_encode($data['data']); ?>;
+                            var pdfURL = '';
+                            for (var i = 0; i < fileData.length; i++) {
+                                if (fileData[i]['FileID'] === fileID) {
+                                    pdfURL = '../../Sitax/file/' + fileData[i]['FileJudul'];
+                                    break;
+                                }
+                            }
+                            return pdfURL;
+                        }
+                    });
+                    </script>
                 </div>
             </div>
         </div>
         <?php include('../includes/footer.php'); ?>
+        </body>
+
+        </html>

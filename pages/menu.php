@@ -80,8 +80,8 @@ Swal.fire({
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Tambah Menu</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
                                 <form action="../actions/menu/add_menu.php" method="POST" enctype="multipart/form-data">
@@ -92,6 +92,9 @@ Swal.fire({
                                             <input type="text" id="MenuID" name="MenuID" class="form-control"
                                                 required />
                                         </div>
+                                        <small class="form-text text-muted">
+                                            contoh : <span>1001</span> <strong>harus 4 character !!</strong>
+                                        </small>
                                     </div>
 
                                     <div class="mb-3">
@@ -222,5 +225,9 @@ Swal.fire({
 
             </div>
         </div>
+        <?php include('../includes/footer.php'); ?>
     </div>
-    <?php include('../includes/footer.php'); ?>
+</div>
+</body>
+
+</html>

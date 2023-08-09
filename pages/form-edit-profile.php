@@ -9,8 +9,11 @@
             <?php include('../includes/navbar.php'); ?>
             <!-- Begin Page Content -->
             <div class="container-fluid">
-                <?php include ("../actions/my-profile/form-edit-profile.php"); ?>
+                <?php include("../actions/my-profile/form-edit-profile.php"); ?>
             </div>
         </div>
     </div>
     <?php include('../includes/footer.php'); ?>
+    </body>
+
+    </html>

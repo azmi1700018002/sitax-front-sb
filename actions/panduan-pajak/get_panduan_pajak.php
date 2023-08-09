@@ -27,11 +27,36 @@ if (isset($data['data']) && is_array($data['data'])) {
     });
 }
 
-// Menampilkan data dalam list-group
-if (isset($data['data']) && is_array($data['data'])) {
-    echo '<ul class="list-group">';
+// Search keyword from query parameter
+$searchKeyword = isset($_GET['search']) ? $_GET['search'] : '';
 
-    foreach ($data['data'] as $panduanPjk) {
+// Filter data based on search keyword
+$filteredData = [];
+foreach ($data['data'] as $panduanPjk) {
+    if (stripos($panduanPjk['NamaPanduanPajak'], $searchKeyword) !== false) {
+        $filteredData[] = $panduanPjk;
+    }
+}
+
+// Number of items per page
+$itemsPerPage = 10;
+
+// Current page number
+$currentPage = isset($_GET['page']) ? intval($_GET['page']) : 1;
+
+// Number of filtered items
+$totalFilteredItems = count($filteredData);
+
+// Update startIndex and endIndex based on filtered data
+$startIndex = ($currentPage - 1) * $itemsPerPage;
+$endIndex = min($startIndex + $itemsPerPage, $totalFilteredItems);
+
+// Menampilkan data dalam list-group
+if (isset($filteredData) && is_array($filteredData)) {
+    echo '<ul class="list-group mb-2">';
+
+    for ($i = $startIndex; $i < $endIndex; $i++) {
+        $panduanPjk = $filteredData[$i];
         echo '<div class="list-group-item d-flex justify-content-between align-items-center">';
         // Menampilkan nama panduan pajak
         echo $panduanPjk['NamaPanduanPajak'];
@@ -125,7 +150,7 @@ if (isset($data['data']) && is_array($data['data'])) {
 
         echo '</div>';
         // Delete Button
-        echo '<button type="button" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
+        echo '<button type="button" class="btn btn-danger btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
         echo '<i class="fas fa-trash"></i>';
         echo '</button>';
         echo '<div class="modal fade" id="deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="deletePanduanPajak" aria-hidden="true">';

@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success Kantor -->
 <?php if (isset($_SESSION["message_kantor_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_kantor_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_kantor_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_kantor_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_kantor_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield Kantor -->
 <?php if (isset($_SESSION["message_kantor_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_kantor_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_kantor_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_kantor_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_kantor_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -89,8 +89,8 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Tambah Kantor</h5>
-                                <button type="button" class="btn-close" data-dismiss="modal"
-                                    aria-label="Close"></button>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">×</span></button>
                             </div>
                             <div class="modal-body">
                                 <form action="../actions/kantor/add_kantor.php" method="POST"
@@ -272,48 +272,51 @@
 
                 <!-- limit textarea form tambah -->
                 <script>
-                    $(document).ready(function () {
-                        $('#limittambahDeskripsi').on('input propertychange', function () {
-                            charLimitTambah(this, 50);
-                        });
+                $(document).ready(function() {
+                    $('#limittambahDeskripsi').on('input propertychange', function() {
+                        charLimitTambah(this, 50);
                     });
+                });
 
-                    function charLimitTambah(input, maxChar) {
-                        var len = $(input).val().length;
-                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                function charLimitTambah(input, maxChar) {
+                    var len = $(input).val().length;
+                    $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            $('#textCounterTambah').text('0 karakter tersisa');
-                        } else {
-                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-                        }
+                    if (len > maxChar) {
+                        $(input).val($(input).val().substring(0, maxChar));
+                        $('#textCounterTambah').text('0 karakter tersisa');
+                    } else {
+                        $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
                     }
+                }
                 </script>
 
                 <!-- limit textarea form edit -->
                 <script>
-                    $(document).ready(function () {
-                        $('.editDeskripsi').on('input propertychange', function () {
-                            charLimit(this, 50);
-                        });
+                $(document).ready(function() {
+                    $('.editDeskripsi').on('input propertychange', function() {
+                        charLimit(this, 50);
                     });
+                });
 
-                    function charLimit(input, maxChar) {
-                        var len = $(input).val().length;
-                        var counter = $(input).closest('.modal-body').find('.charNum');
-                        counter.text(len + ' dari ' + maxChar + ' karakter');
+                function charLimit(input, maxChar) {
+                    var len = $(input).val().length;
+                    var counter = $(input).closest('.modal-body').find('.charNum');
+                    counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            counter.text('0 karakter tersisa');
-                        } else {
-                            counter.text(maxChar - len + ' karakter tersisa');
-                        }
+                    if (len > maxChar) {
+                        $(input).val($(input).val().substring(0, maxChar));
+                        counter.text('0 karakter tersisa');
+                    } else {
+                        counter.text(maxChar - len + ' karakter tersisa');
                     }
+                }
                 </script>
             </div>
         </div>
         <?php include('../includes/footer.php'); ?>
     </div>
 </div>
+</body>
+
+</html>

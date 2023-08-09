@@ -88,6 +88,9 @@
                                             <input type="text" id="FileID" name="FileID" class="form-control"
                                                 required />
                                         </div>
+                                        <small class="form-text text-muted">
+                                            contoh : <span>FL0000000001</span> <strong>harus 12 character !!</strong>
+                                        </small>
                                     </div>
                                     <!-- <div class="mb-3">
                             <label class="form-label" for="FileJudul">File Judul : </label>
@@ -95,15 +98,28 @@
                                 <input type="text" id="FileJudul" name="FileJudul" class="form-control" required />
                             </div>
                         </div> -->
-                                    <div class="mb-3">
-                                        <label class="form-label" for="file_judul">File Judul : </label>
-                                        <div class="form-outline">
-                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
-                                            <input type="file" id="file_judul" name="file_judul" class="form-control"
-                                                required />
+                                    <div class="form-group mb-3">
+                                        <label for="file_judul">File Judul :</label>
+                                        <div class="custom-file">
+                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576">
+                                            <input type="file" class="custom-file-input" id="file_judul"
+                                                name="file_judul" required>
+                                            <label class="custom-file-label" for="file_judul">choose file</label>
                                         </div>
+                                        <small class="form-text text-muted">
+                                            Selected file: <span id="selectedFileName">No file chosen</span>
+                                        </small>
                                     </div>
 
+
+                                    <!-- <div class="mb-3">
+                                        <div class="custom-file">
+                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+                                            <input type="file" class="custom-file-input" id="file_judul"
+                                                name="file_judul">
+                                            <label class="custom-file-label" for="file_judul">Choose file</label>
+                                        </div>
+                                    </div> -->
 
                                     <div class="mb-3">
                                         <label class="form-label" for="FilePath">File Path : </label>
@@ -111,6 +127,9 @@
                                             <input type="text" id="FilePath" name="FilePath" class="form-control"
                                                 required />
                                         </div>
+                                        <small class="form-text text-muted">
+                                            path : <span>../../Sitax/file/</span>
+                                        </small>
                                     </div>
 
                                     <div class="mb-3">
@@ -211,9 +230,26 @@
                         }
                     </script>
 
+                    <script>
+                        // Ambil elemen input file dan label
+                        const inputJudul = document.getElementById("file_judul");
+                        const labelJudul = document.querySelector(".custom-file-label");
+                        const selectedFileName = document.getElementById("selectedFileName");
+
+                        // Tambahkan event listener untuk mendeteksi perubahan pada input file
+                        inputJudul.addEventListener("change", function () {
+                            // Perbarui teks label dengan nama file yang dipilih
+                            labelJudul.textContent = inputJudul.files[0].name;
+                            // Perbarui teks selectedFileName juga jika perlu
+                            selectedFileName.textContent = inputJudul.files[0].name;
+                        });
+                    </script>
 
 
                 </div>
             </div>
         </div>
         <?php include('../includes/footer.php'); ?>
+        </body>
+
+        </html>

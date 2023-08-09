@@ -226,52 +226,55 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- limit textarea form tambah -->
+                <script>
+                    $(document).ready(func tion() {
+                        $('#limittambahDeskripsi').on('input propertychange', func tion() {
+                            charLimitTambah(this, 50);
+                        });
+                    });
+
+                    function charLimitTambah(input, maxChar) {
+                        var len = $(input).val().length;
+                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            $('#textCounterTambah').text('0 karakter tersisa');
+                        } else {
+                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+                        }
+                    }
+                </script>
+
+                <!-- limit textarea form edit -->
+                <script>
+                    $(document).ready(func tion() {
+                        $('.editDeskripsi').on('input propertychange', func tion() {
+                            charLimit(this, 50);
+                        });
+                    });
+
+                    function charLimit(input, maxChar) {
+                        var len = $(input).val().length;
+                        var counter = $(input).closest('.modal-body').find('.charNum');
+                        counter.text(len + ' dari ' + maxChar + ' karakter');
+
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            counter.text('0 karakter tersisa');
+                        } else {
+                            counter.text(maxChar - len + ' karakter tersisa');
+                        }
+                    }
+                </script>
+
             </div>
         </div>
+        <?php include('../includes/footer.php'); ?>
     </div>
+</div>
+</body>
 
-
-    <!-- limit textarea form tambah -->
-    <script>
-        $(document).ready(func tion() {
-            $('#limittambahDeskripsi').on('input propertychange', func tion() {
-                charLimitTambah(this, 50);
-            });
-        });
-
-        function charLimitTambah(input, maxChar) {
-            var len = $(input).val().length;
-            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
-
-            if (len > maxChar) {
-                $(input).val($(input).val().substring(0, maxChar));
-                $('#textCounterTambah').text('0 karakter tersisa');
-            } else {
-                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-            }
-        }
-    </script>
-
-    <!-- limit textarea form edit -->
-    <script>
-        $(document).ready(func tion() {
-            $('.editDeskripsi').on('input propertychange', func tion() {
-                charLimit(this, 50);
-            });
-        });
-
-        function charLimit(input, maxChar) {
-            var len = $(input).val().length;
-            var counter = $(input).closest('.modal-body').find('.charNum');
-            counter.text(len + ' dari ' + maxChar + ' karakter');
-
-            if (len > maxChar) {
-                $(input).val($(input).val().substring(0, maxChar));
-                counter.text('0 karakter tersisa');
-            } else {
-                counter.text(maxChar - len + ' karakter tersisa');
-            }
-        }
-    </script>
-
-    <?php include('../includes/footer.php'); ?>
+</html>

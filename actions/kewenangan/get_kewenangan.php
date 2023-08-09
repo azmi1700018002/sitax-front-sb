@@ -65,15 +65,9 @@ if (isset($data2["data"])) {
             } else {
                 echo "<td class='text-center'>Tidak Diketahui</td>"; // Tampilkan pesan jika tidak ada keterangan yang sesuai
             }
-            echo "<td class='text-center'>" .
-                $kewenangan["IsCreated"] .
-                "</td>";
-            echo "<td class='text-center'>" .
-                $kewenangan["IsUpdated"] .
-                "</td>";
-            echo "<td class='text-center'>" .
-                $kewenangan["IsDeleted"] .
-                "</td>";
+            echo "<td class='text-center'>" . ($kewenangan["IsCreated"] == 1 ? "Aktif" : "Tidak Aktif") . "</td>";
+            echo "<td class='text-center'>" . ($kewenangan["IsUpdated"] == 1 ? "Aktif" : "Tidak Aktif") . "</td>";
+            echo "<td class='text-center'>" . ($kewenangan["IsDeleted"] == 1 ? "Aktif" : "Tidak Aktif") . "</td>";
 
             echo '<td>
             <div class="d-flex justify-content-center">
