@@ -17,18 +17,24 @@ $headers = ["Authorization: " . $token];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $file_id = $_POST["FileID"];
-    $FileJudul = $_POST["FileJudul"];
+    $FileJudul = $_FILES["file_judul"];
     $FilePath = $_POST["FilePath"];
     $FileDate = $_POST["FileDate"];
     $FileJenis = $_POST["FileJenis"];
 
     $post_data = [
         "FileID" => $file_id,
-        "FileJudul" => $FileJudul,
+        "file_judul" => $FileJudul,
         "FilePath" => $FilePath,
         "FileDate" => $FileDate,
         "FileJenis" => $FileJenis,
     ];
+
+    // Check if a new file is uploaded
+    if ($FileJudul["size"] > 0) {
+        // Append file data to the post data
+        $post_data["file_judul"] = new CURLFile($FileJudul["tmp_name"], $FileJudul["type"], $FileJudul["name"]);
+    }
 
     $ch = curl_init($baseUrl . "auth/file/" . $file_id);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

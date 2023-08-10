@@ -55,23 +55,27 @@ function isActive($link)
     <div class="sidebar-heading">Interface</div>
 
     <?php foreach ($menuData as $menuItem): ?>
-        <?php
+    <?php
         // Check if the menu item has 'AllowedGroupIDs' information and if it is allowed for the user's GroupID
         if (isset($menuItem['MenuIDfk']) && is_array($menuItem['MenuIDfk'])) {
             $allowedGroupIDs = array_column($menuItem['MenuIDfk'], 'GroupID');
             if (in_array($_SESSION["GroupID"], $allowedGroupIDs)):
                 ?>
-                <!-- Nav Item - Pages Collapse Menu -->
-                <li class="nav-item <?php echo isActive($menuItem['MenuLink']); ?>">
-                    <a class="nav-link" href="<?php echo $menuItem['MenuLink']; ?>">
-                        <i class="<?php echo $menuItem['MenuIcon']; ?>"></i>
-                        <span>
-                            <?php echo $menuItem['MenuNama']; ?>
-                        </span>
-                    </a>
-                </li>
-            <?php endif; ?>
-        <?php } ?>
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item <?php echo isActive($menuItem['MenuLink']); ?>">
+        <a class="nav-link" href="<?php echo $menuItem['MenuLink']; ?>">
+            <i class="<?php echo $menuItem['MenuIcon']; ?>"></i>
+            <span>
+                <?php echo $menuItem['MenuNama']; ?>
+            </span>
+        </a>
+    </li>
+    <?php endif; ?>
+    <?php } ?>
     <?php endforeach; ?>
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
 </ul>
 <!-- End of Sidebar -->

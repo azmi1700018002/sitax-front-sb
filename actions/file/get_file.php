@@ -122,16 +122,21 @@ if (isset($data2["data"])) {
         '">
 </div>
 </div>
-                        <div class="mb-3">
-                        <label class="form-label" for="FileJudul">Judul File : </label>
-                        <div class="form-outline">
-                            <input type="text" id="FileJudul" name="FileJudul" class="form-control"
-                            value="' .
-        $file["FileJudul"] .
-        '">
-                        </div>
-                    </div>
-                    
+
+<div class="form-group mb-3">
+        <label for="file_edit_judul">File Judul :</label>
+        <div class="custom-file">
+            <input type="hidden" name="MAX_FILE_SIZE" value="1048576">
+            <input type="file" class="custom-file-input" id="file_edit_judul" name="file_judul" required>
+            <label class="custom-file-label edit" for="file_edit_judul">Choose file</label>
+        </div>
+        <small class="form-text text-muted">
+            Selected file: <span id="selectedEditFileName">No file chosen</span>
+            <button type="button" class="btn btn-link p-0 ml-2" id="clearEditFileSelection" style="display: none;">&times;</button>
+        </small>
+    </div>
+
+      
                     <div class="mb-3">
                     <label class="form-label" for="FilePath">File Path : </label>
                     <div class="form-outline">
@@ -164,7 +169,7 @@ if (isset($data2["data"])) {
             </div>      
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+            <input class="btn btn-primary" type="reset" value="Reset">
                 <button type="submit" class="btn btn-success">Edit</button>
             </div>
             </form>

@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success Pajak -->
 <?php if (isset($_SESSION["message_file_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_file_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_file_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_file_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_file_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield Pajak -->
 <?php if (isset($_SESSION["message_file_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_file_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_file_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_file_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_file_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -83,56 +83,6 @@
                                 <form action="../actions/file/add_file.php" method="POST" enctype="multipart/form-data">
 
                                     <div class="mb-3">
-                                        <label class="form-label" for="FileID">ID File : </label>
-                                        <div class="form-outline">
-                                            <input type="text" id="FileID" name="FileID" class="form-control"
-                                                required />
-                                        </div>
-                                        <small class="form-text text-muted">
-                                            contoh : <span>FL0000000001</span> <strong>harus 12 character !!</strong>
-                                        </small>
-                                    </div>
-                                    <!-- <div class="mb-3">
-                            <label class="form-label" for="FileJudul">File Judul : </label>
-                            <div class="form-outline">
-                                <input type="text" id="FileJudul" name="FileJudul" class="form-control" required />
-                            </div>
-                        </div> -->
-                                    <div class="form-group mb-3">
-                                        <label for="file_judul">File Judul :</label>
-                                        <div class="custom-file">
-                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576">
-                                            <input type="file" class="custom-file-input" id="file_judul"
-                                                name="file_judul" required>
-                                            <label class="custom-file-label" for="file_judul">choose file</label>
-                                        </div>
-                                        <small class="form-text text-muted">
-                                            Selected file: <span id="selectedFileName">No file chosen</span>
-                                        </small>
-                                    </div>
-
-
-                                    <!-- <div class="mb-3">
-                                        <div class="custom-file">
-                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
-                                            <input type="file" class="custom-file-input" id="file_judul"
-                                                name="file_judul">
-                                            <label class="custom-file-label" for="file_judul">Choose file</label>
-                                        </div>
-                                    </div> -->
-
-                                    <div class="mb-3">
-                                        <label class="form-label" for="FilePath">File Path : </label>
-                                        <div class="form-outline">
-                                            <input type="text" id="FilePath" name="FilePath" class="form-control"
-                                                required />
-                                        </div>
-                                        <small class="form-text text-muted">
-                                            path : <span>../../Sitax/file/</span>
-                                        </small>
-                                    </div>
-
-                                    <div class="mb-3">
                                         <div class="form-group">
                                             <label for="FileJenis">File Jenis :</label>
                                             <div class="input-group">
@@ -178,6 +128,59 @@
                                         </div>
 
                                     </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" for="FileID">ID File : </label>
+                                        <div class="form-outline">
+                                            <input type="text" id="FileID" name="FileID" class="form-control"
+                                                required />
+                                        </div>
+                                        <small class="form-text text-muted">
+                                            contoh : <span>FL0000000001</span> <strong>harus 12 character !!</strong>
+                                        </small>
+                                    </div>
+                                    <!-- <div class="mb-3">
+                            <label class="form-label" for="FileJudul">File Judul : </label>
+                            <div class="form-outline">
+                                <input type="text" id="FileJudul" name="FileJudul" class="form-control" required />
+                            </div>
+                        </div> -->
+                                    <div class="form-group mb-3">
+                                        <label for="file_judul">File Judul :</label>
+                                        <div class="custom-file">
+                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576">
+                                            <input type="file" class="custom-file-input" id="file_judul"
+                                                name="file_judul" required>
+                                            <label class="custom-file-label add" for="file_judul">choose file</label>
+                                        </div>
+                                        <small class="form-text text-muted">
+                                            Selected file: <span id="selectedFileName">No file chosen</span><button
+                                                type="button" class="btn btn-link p-0 ml-2" id="clearFileSelection"
+                                                style="display: none;">&times;</button>
+                                        </small>
+                                    </div>
+
+                                    <!-- <div class="mb-3">
+                                        <div class="custom-file">
+                                            <input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+                                            <input type="file" class="custom-file-input" id="file_judul"
+                                                name="file_judul">
+                                            <label class="custom-file-label" for="file_judul">Choose file</label>
+                                        </div>
+                                    </div> -->
+
+                                    <div class="mb-3">
+                                        <label class="form-label" for="FilePath">File Path : </label>
+                                        <div class="form-outline">
+                                            <input type="text" id="FilePath" name="FilePath" class="form-control"
+                                                required />
+                                        </div>
+                                        <small class="form-text text-muted">
+                                            path : <span>../../SitaxUpdate/file/</span>
+                                        </small>
+                                    </div>
+
+
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
                                         <button type="submit" class="btn btn-success">Tambah</button>
@@ -187,65 +190,72 @@
                         </div>
                     </div>
 
-                    <!-- limit textarea form tambah -->
                     <script>
-                        $(document).ready(function () {
-                            $('#limittambahDeskripsi').on('input propertychange', function () {
-                                charLimitTambah(this, 50);
-                            });
-                        });
+                    // Ambil elemen input file, label, dan tombol silang
+                    const inputJudul = document.getElementById("file_judul");
+                    const labelJudul = document.querySelector(".custom-file-label.add");
+                    const clearButton = document.getElementById("clearFileSelection");
+                    const selectedFileName = document.getElementById("selectedFileName");
 
-                        function charLimitTambah(input, maxChar) {
-                            var len = $(input).val().length;
-                            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                    // Tambahkan event listener untuk tombol silang
+                    clearButton.addEventListener("click", function() {
+                        // Hapus pilihan file dengan mereset nilai input file
+                        inputJudul.value = "";
+                        // Perbarui teks label dan selectedFileName
+                        labelJudul.textContent = "choose file";
+                        selectedFileName.textContent = "No file chosen";
+                        // Sembunyikan kembali tombol silang
+                        clearButton.style.display = "none";
+                    });
 
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                $('#textCounterTambah').text('0 karakter tersisa');
-                            } else {
-                                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-                            }
+                    // Tambahkan event listener untuk mendeteksi perubahan pada input file
+                    inputJudul.addEventListener("change", function() {
+                        // Perbarui teks label dengan nama file yang dipilih
+                        labelJudul.textContent = inputJudul.files[0].name;
+                        // Perbarui teks selectedFileName juga jika perlu
+                        selectedFileName.textContent = inputJudul.files[0].name;
+                        // Tampilkan tombol silang setelah file dipilih dan diunggah
+                        clearButton.style.display = "inline";
+                    });
+
+                    // Ambil elemen input file, label, dan tombol silang untuk form kedua
+                    const editJudul = document.getElementById("file_edit_judul");
+                    const labelEditJudul = document.querySelector(".custom-file-label.edit");
+                    const clearEditButton = document.getElementById("clearEditFileSelection");
+                    const selectedEditFileName = document.getElementById("selectedEditFileName");
+
+                    // Tambahkan event listener untuk tombol silang pada form kedua
+                    clearEditButton.addEventListener("click", function() {
+                        // Hapus pilihan file dengan mereset nilai input file
+                        editJudul.value = "";
+                        // Perbarui teks label dan selectedFileName
+                        labelEditJudul.textContent = "Choose file";
+                        selectedEditFileName.textContent = "No file chosen";
+                        // Sembunyikan kembali tombol silang
+                        clearEditButton.style.display = "none";
+                    });
+
+                    // Tambahkan event listener untuk mendeteksi perubahan pada input file pada form kedua
+                    editJudul.addEventListener("change", function() {
+                        // Perbarui teks label dengan nama file yang dipilih
+                        labelEditJudul.textContent = editJudul.files[0].name;
+                        // Perbarui teks selectedFileName juga jika perlu
+                        selectedEditFileName.textContent = editJudul.files[0].name;
+                        // Tampilkan tombol silang setelah file dipilih dan diunggah
+                        clearEditButton.style.display = "inline";
+                    });
+
+                    // Set the value of the file input when the page loads
+                    document.addEventListener("DOMContentLoaded", function() {
+                        var fileJudulValue = document.getElementById("FileJudulValue").value;
+                        if (fileJudulValue !== "") {
+                            var fileInput = document.getElementById("file_edit_judul");
+                            fileInput.insertAdjacentHTML("beforebegin", "<p>File Sebelumnya: " +
+                                fileJudulValue +
+                                "</p>");
                         }
+                    });
                     </script>
-
-                    <!-- limit textarea form edit -->
-                    <script>
-                        $(document).ready(function () {
-                            $('.editDeskripsi').on('input propertychange', function () {
-                                charLimit(this, 50);
-                            });
-                        });
-
-                        function charLimit(input, maxChar) {
-                            var len = $(input).val().length;
-                            var counter = $(input).closest('.modal-body').find('.charNum');
-                            counter.text(len + ' dari ' + maxChar + ' karakter');
-
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                counter.text('0 karakter tersisa');
-                            } else {
-                                counter.text(maxChar - len + ' karakter tersisa');
-                            }
-                        }
-                    </script>
-
-                    <script>
-                        // Ambil elemen input file dan label
-                        const inputJudul = document.getElementById("file_judul");
-                        const labelJudul = document.querySelector(".custom-file-label");
-                        const selectedFileName = document.getElementById("selectedFileName");
-
-                        // Tambahkan event listener untuk mendeteksi perubahan pada input file
-                        inputJudul.addEventListener("change", function () {
-                            // Perbarui teks label dengan nama file yang dipilih
-                            labelJudul.textContent = inputJudul.files[0].name;
-                            // Perbarui teks selectedFileName juga jika perlu
-                            selectedFileName.textContent = inputJudul.files[0].name;
-                        });
-                    </script>
-
-
                 </div>
             </div>
         </div>

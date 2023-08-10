@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success User -->
 <?php if (isset($_SESSION["message_group_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_group_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_group_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_group_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_group_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield User -->
 <?php if (isset($_SESSION["message_group_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_group_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_group_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_group_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_group_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -53,11 +53,11 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th class="text-center">No</th>
-                                <th class="text-center">ID Group</th>
-                                <th class="text-center">Nama Group</th>
-                                <th class="text-center">Deskripsi Group</th>
-                                <th class="text-center">Actions</th>
+                                <th class="text-center all">No</th>
+                                <th class="text-center all">ID Group</th>
+                                <th class="text-center all">Nama Group</th>
+                                <th class="text-center all">Deskripsi Group</th>
+                                <th class="text-center all">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -119,45 +119,45 @@
 
                 <!-- limit textarea form tambah -->
                 <script>
-                    $(document).ready(function () {
-                        $('#limittambahDeskripsi').on('input propertychange', function () {
-                            charLimitTambah(this, 50);
-                        });
+                $(document).ready(function() {
+                    $('#limittambahDeskripsi').on('input propertychange', function() {
+                        charLimitTambah(this, 50);
                     });
+                });
 
-                    function charLimitTambah(input, maxChar) {
-                        var len = $(input).val().length;
-                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                function charLimitTambah(input, maxChar) {
+                    var len = $(input).val().length;
+                    $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            $('#textCounterTambah').text('0 karakter tersisa');
-                        } else {
-                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-                        }
+                    if (len > maxChar) {
+                        $(input).val($(input).val().substring(0, maxChar));
+                        $('#textCounterTambah').text('0 karakter tersisa');
+                    } else {
+                        $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
                     }
+                }
                 </script>
 
                 <!-- limit textarea form edit -->
                 <script>
-                    $(document).ready(function () {
-                        $('.editDeskripsi').on('input propertychange', function () {
-                            charLimit(this, 50);
-                        });
+                $(document).ready(function() {
+                    $('.editDeskripsi').on('input propertychange', function() {
+                        charLimit(this, 50);
                     });
+                });
 
-                    function charLimit(input, maxChar) {
-                        var len = $(input).val().length;
-                        var counter = $(input).closest('.modal-body').find('.charNum');
-                        counter.text(len + ' dari ' + maxChar + ' karakter');
+                function charLimit(input, maxChar) {
+                    var len = $(input).val().length;
+                    var counter = $(input).closest('.modal-body').find('.charNum');
+                    counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            counter.text('0 karakter tersisa');
-                        } else {
-                            counter.text(maxChar - len + ' karakter tersisa');
-                        }
+                    if (len > maxChar) {
+                        $(input).val($(input).val().substring(0, maxChar));
+                        counter.text('0 karakter tersisa');
+                    } else {
+                        counter.text(maxChar - len + ' karakter tersisa');
                     }
+                }
                 </script>
 
             </div>
