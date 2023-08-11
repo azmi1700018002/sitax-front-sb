@@ -55,6 +55,7 @@ if (isset($_POST["submit"])) {
                 $_SESSION["StsUser"] = $response["StsUser"];
                 $_SESSION["GroupID"] = $response["GroupID"];
                 $_SESSION["login_success"] = "Berhasil login";
+
                 header("Location: pages/dashboard.php");
                 exit();
             } else {

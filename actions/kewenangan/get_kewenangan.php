@@ -99,13 +99,13 @@ if (isset($data3["data"])) {
                     echo "<td class='text-center'>Tidak Diketahui</td>"; // Tampilkan pesan jika tidak ada keterangan yang sesuai
                 }
                 echo "<td class='text-center'>" .
-                    ($kewenangan["IsCreated"] == 1 ? "Aktif" : "Tidak Aktif") .
+                    ($kewenangan["IsCreated"] == 1 ? "<span class='badge badge-primary'>" . "Aktif" . "</span>" : "<span class='badge badge-danger'>" . "Tidak Aktif" . "</span>") .
                     "</td>";
                 echo "<td class='text-center'>" .
-                    ($kewenangan["IsUpdated"] == 1 ? "Aktif" : "Tidak Aktif") .
+                    ($kewenangan["IsUpdated"] == 1 ? "<span class='badge badge-primary'>" . "Aktif" . "</span>" : "<span class='badge badge-danger'>" . "Tidak Aktif" . "</span>") .
                     "</td>";
                 echo "<td class='text-center'>" .
-                    ($kewenangan["IsDeleted"] == 1 ? "Aktif" : "Tidak Aktif") .
+                    ($kewenangan["IsDeleted"] == 1 ? "<span class='badge badge-primary'>" . "Aktif" . "</span>" : "<span class='badge badge-danger'>" . "Tidak Aktif" . "</span>") .
                     "</td>";
 
                 echo '<td>
@@ -206,14 +206,14 @@ if (isset($data3["data"])) {
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="IsUpdated"
                                                     id="IsUpdated1"  value="1" ' .
-                    ($kewenangan["IsCreated"] == 1 ? "checked" : "") .
+                    ($kewenangan["IsUpdated"] == 1 ? "checked" : "") .
                     '/>
                                                 <label class="form-check-label" for="IsUpdated1"> Aktif </label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="IsUpdated"
                                                     id="IsUpdated0"  value="0" ' .
-                    ($kewenangan["IsCreated"] == 0 ? "checked" : "") .
+                    ($kewenangan["IsUpdated"] == 0 ? "checked" : "") .
                     '/>
                                                 <label class="form-check-label" for="IsUpdated0"> Tidak Aktif </label>
                                             </div>
@@ -225,14 +225,14 @@ if (isset($data3["data"])) {
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="IsDeleted"
                                                 id="IsDeleted1" value="1" ' .
-                    ($kewenangan["IsCreated"] == 1 ? "checked" : "") .
+                    ($kewenangan["IsDeleted"] == 1 ? "checked" : "") .
                     '/>
                                             <label class="form-check-label" for="IsDeleted1"> Aktif </label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="IsDeleted"
                                                 id="IsDeleted0"  value="0" ' .
-                    ($kewenangan["IsCreated"] == 0 ? "checked" : "") .
+                    ($kewenangan["IsDeleted"] == 0 ? "checked" : "") .
                     '/>
                                             <label class="form-check-label" for="IsDeleted0"> Tidak Aktif </label>
                                         </div>

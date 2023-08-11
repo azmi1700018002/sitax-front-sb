@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success User -->
 <?php if (isset($_SESSION["message_user_success"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: '<?php echo $_SESSION["message_user_success"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_user_success"]); ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: '<?php echo $_SESSION["message_user_success"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_user_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield User -->
 <?php if (isset($_SESSION["message_user_failed"])) { ?>
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: '<?php echo $_SESSION["message_user_failed"]; ?>',
-            showConfirmButton: false,
-            timer: 8000
-        });
-    </script>
-    <?php unset($_SESSION["message_user_failed"]); ?>
+<script>
+Swal.fire({
+    icon: 'error',
+    title: '<?php echo $_SESSION["message_user_failed"]; ?>',
+    showConfirmButton: false,
+    timer: 8000
+});
+</script>
+<?php unset($_SESSION["message_user_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -269,7 +269,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mb-3">
+                                    <!-- <div class="mb-3">
                                         <label class="form-label" for="profile_picture">Upload Profile :
                                         </label>
                                         <div class="form-outline">
@@ -277,7 +277,7 @@
                                             <input type="file" id="profile_picture" name="profile_picture"
                                                 class="form-control" />
                                         </div>
-                                    </div>
+                                    </div> -->
 
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger"
@@ -291,45 +291,45 @@
 
                     <!-- limit textarea form tambah -->
                     <script>
-                        $(document).ready(function () {
-                            $('#limittambahDeskripsi').on('input propertychange', function () {
-                                charLimitTambah(this, 50);
-                            });
+                    $(document).ready(function() {
+                        $('#limittambahDeskripsi').on('input propertychange', function() {
+                            charLimitTambah(this, 50);
                         });
+                    });
 
-                        function charLimitTambah(input, maxChar) {
-                            var len = $(input).val().length;
-                            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                    function charLimitTambah(input, maxChar) {
+                        var len = $(input).val().length;
+                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                $('#textCounterTambah').text('0 karakter tersisa');
-                            } else {
-                                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
-                            }
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            $('#textCounterTambah').text('0 karakter tersisa');
+                        } else {
+                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
                         }
+                    }
                     </script>
 
                     <!-- limit textarea form edit -->
                     <script>
-                        $(document).ready(function () {
-                            $('.editDeskripsi').on('input propertychange', function () {
-                                charLimit(this, 50);
-                            });
+                    $(document).ready(function() {
+                        $('.editDeskripsi').on('input propertychange', function() {
+                            charLimit(this, 50);
                         });
+                    });
 
-                        function charLimit(input, maxChar) {
-                            var len = $(input).val().length;
-                            var counter = $(input).closest('.modal-body').find('.charNum');
-                            counter.text(len + ' dari ' + maxChar + ' karakter');
+                    function charLimit(input, maxChar) {
+                        var len = $(input).val().length;
+                        var counter = $(input).closest('.modal-body').find('.charNum');
+                        counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                            if (len > maxChar) {
-                                $(input).val($(input).val().substring(0, maxChar));
-                                counter.text('0 karakter tersisa');
-                            } else {
-                                counter.text(maxChar - len + ' karakter tersisa');
-                            }
+                        if (len > maxChar) {
+                            $(input).val($(input).val().substring(0, maxChar));
+                            counter.text('0 karakter tersisa');
+                        } else {
+                            counter.text(maxChar - len + ' karakter tersisa');
                         }
+                    }
                     </script>
                 </div>
             </div>

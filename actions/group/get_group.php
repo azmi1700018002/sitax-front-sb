@@ -18,21 +18,50 @@ curl_setopt_array($curl, [
 ]);
 $response = curl_exec($curl);
 curl_close($curl);
-$data = json_decode($response, true);
-if (isset($data["data"])) {
+$data1 = json_decode($response, true);
+if (isset($data1["data"])) {
     $nomor = 1; // initialize the variable
-    foreach ($data["data"] as $group) {
+    foreach ($data1["data"] as $group) {
         echo "<tr>";
         echo "<td class='text-center'>" . $nomor . "</td>"; // add the number column
         echo "<td class='text-center'>" . $group["GroupID"] . "</td>";
         echo "<td class='text-center'>" . $group["GroupNama"] . "</td>";
         echo "<td class='text-center'>" . $group["GroupDeskripsi"] . "</td>";
-        echo '<td>
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteGroup' .
-            $group["GroupID"] .
-            '"><i class="fas fa-trash"></i> </button>
-            <div class="modal fade" id="deleteGroup' .
+        // Loop through each menu item in the data
+        foreach ($data["data"] as $menuItem) {
+            $showButtons = false; // Flag to determine whether to show buttons or not
+
+            foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                // Check if MenuID, GroupID, and IsDeleted condition matches
+                if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                    if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+                        $showButtons = true;
+                    }
+                    break; // No need to continue checking other MenuIDfk entries for this menu item
+                }
+            }
+
+            if ($showButtons) {
+                echo '<td>
+    <div class="d-flex justify-content-center">';
+
+                if ($menuIDfk["IsDeleted"] === "1") {
+                    echo '<button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteGroup' .
+                        $group["GroupID"] .
+                        '"><i class="fas fa-trash"></i></button>';
+                }
+
+                if ($menuIDfk["IsUpdated"] === "1") {
+                    echo '<button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editGroup' .
+                        $group["GroupID"] .
+                        '"><i class="fas fa-edit"></i></button>';
+                }
+
+                echo '</div></td>';
+            }
+        }
+
+        echo '<div class="modal fade" id="deleteGroup' .
             $group["GroupID"] .
             '" tabindex="-1" aria-labelledby="deleteGroup" aria-hidden="true">
   <div class="modal-dialog">
@@ -56,9 +85,7 @@ if (isset($data["data"])) {
     </div>
     </div>
     </div>
-            <button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editGroup' .
-            $group["GroupID"] .
-            '">  <i class="fas fa-edit"></i> </button>
+           
             <div class="modal fade" id="editGroup' .
             $group["GroupID"] .
             '" tabindex="-1" aria-labelledby="editGroup" aria-hidden="true">
@@ -105,8 +132,7 @@ if (isset($data["data"])) {
                     </form>
                 </div>
             </div>
-        </div>
-    </td>';
+        </div>';
         echo "</tr>";
         $nomor++; // increment the variable
     }

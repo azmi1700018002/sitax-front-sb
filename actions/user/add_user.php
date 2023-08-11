@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $HostIP = $_POST["HostIP"];
     $StsUser = $_POST["StsUser"];
     $KdKantor = $_POST["KdKantor"];
-    $ProfilePicture = $_FILES["profile_picture"];
+    // $ProfilePicture = $_FILES["profile_picture"];
 
     $post_data = [
         "GroupID" => $GroupID,
@@ -35,21 +35,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "HostIP" => $HostIP,
         "StsUser" => $StsUser,
         "KdKantor" => $KdKantor,
-        "profile_picture" => $ProfilePicture,
+        // "profile_picture" => $ProfilePicture,
     ];
 
     // Append file data to the post data
-    // Check if profile picture is uploaded or not
-    if (empty($ProfilePicture["name"])) {
-        // Set the default profile picture value from the API response
-        $defaultProfilePicture = "default_profile.png"; // Change this to the default profile picture filename you expect from the API
+    // // Check if profile picture is uploaded or not
+    // if (empty($ProfilePicture["name"])) {
+    //     // Set the default profile picture value from the API response
+    //     $defaultProfilePicture = "default_profile.png"; // Change this to the default profile picture filename you expect from the API
 
-        // Add the default profile picture value to the post data
-        $post_data["profile_picture"] = $defaultProfilePicture;
-    } else {
-        // Append file data to the post data
-        $post_data["profile_picture"] = new CURLFile($ProfilePicture["tmp_name"], $ProfilePicture["type"], $ProfilePicture["name"]);
-    }
+    //     // Add the default profile picture value to the post data
+    //     $post_data["profile_picture"] = $defaultProfilePicture;
+    // } else {
+    //     // Append file data to the post data
+    //     $post_data["profile_picture"] = new CURLFile($ProfilePicture["tmp_name"], $ProfilePicture["type"], $ProfilePicture["name"]);
+    // }
 
 
     $ch = curl_init($baseUrl . "register");

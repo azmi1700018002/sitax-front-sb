@@ -39,7 +39,6 @@ Swal.fire({
             <div class="container-fluid">
                 <!-- Page Heading -->
 
-
                 <h3>Kewenangan</h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">

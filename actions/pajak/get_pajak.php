@@ -57,18 +57,43 @@ if (isset($data2["data"])) {
             echo "<tr>";
             echo "<td class='text-center'>" . $nomor . "</td>"; // add the number column
             echo "<td class='text-center'>" . $pajak["PajakID"] . "</td>";
-            echo "<td class='text-center'><a href='#' class='namaPajakLink' data-pajakid='" . $pajak["PajakID"] . "'>" . $pajak["NamaPajak"] . "</a></td>";
+            echo "<td class='text-center'><a href='#' class='namaPajakLink' data-pajakid='" .
+                $pajak["PajakID"] .
+                "'>" .
+                $pajak["NamaPajak"] .
+                "</a></td>";
             echo "<td class='text-center'>" . $pajak["ParentPajak"] . "</td>";
-            echo "<td class='text-center'>" . ($pajak["StsPajak"] == 1 ? "Ditampilkan" : "Tidak Ditampilkan") . "</td>";
+            echo "<td class='text-center'>" .
+                ($pajak["StsPajak"] == 1
+                    ? "Ditampilkan"
+                    : "Tidak Ditampilkan") .
+                "</td>";
             echo "<td class='text-center'>" . $pajak["KetPajak"] . "</td>";
             echo "<td class='text-center'>" . $pajak["StsParent"] . "</td>";
             echo "<td class='text-center'>" . $pajak["FileID"] . "</td>";
             echo '<td>
-        <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
-                $pajak["PajakID"] .
-                '"><i class="fas fa-trash"></i> </button>
-            <div class="modal fade" id="deletePajak' .
+        <div class="d-flex justify-content-center">';
+
+            // Loop through each menu item in the data
+            foreach ($data["data"] as $menuItem) {
+                foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                    // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                    if (
+                        $menuIDfk["IsDeleted"] === "1" &&
+                        $menuIDfk["MenuID"] === $menuID &&
+                        $menuIDfk["GroupID"] === $groupIDToCheck
+                    ) {
+                        // Add the button HTML
+                        echo '
+                    <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
+                            $pajak["PajakID"] .
+                            '"><i class="fas fa-trash"></i> </button>';
+                        break; // No need to continue checking other MenuIDfk entries for this menu item
+                    }
+                }
+            }
+
+            echo '<div class="modal fade" id="deletePajak' .
                 $pajak["PajakID"] .
                 '" tabindex="-1" aria-labelledby="deletePajak" aria-hidden="true">
   <div class="modal-dialog">
@@ -91,11 +116,27 @@ if (isset($data2["data"])) {
       </div>
     </div>
     </div>
-    </div>
-            <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
-                $pajak["PajakID"] .
-                '">  <i class="fas fa-edit"></i> </button>
-            <div class="modal fade" id="editPajak' .
+    </div>';
+            // Loop through each menu item in the data
+            foreach ($data["data"] as $menuItem) {
+                foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                    // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                    if (
+                        $menuIDfk["IsUpdated"] === "1" &&
+                        $menuIDfk["MenuID"] === $menuID &&
+                        $menuIDfk["GroupID"] === $groupIDToCheck
+                    ) {
+                        // Add the button HTML
+                        echo '
+                <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
+                            $pajak["PajakID"] .
+                            '">  <i class="fas fa-edit"></i> </button>';
+                        break; // No need to continue checking other MenuIDfk entries for this menu item
+                    }
+                }
+            }
+
+            echo '<div class="modal fade" id="editPajak' .
                 $pajak["PajakID"] .
                 '" tabindex="-1" aria-labelledby="editPajak" aria-hidden="true">
             <div class="modal-dialog">

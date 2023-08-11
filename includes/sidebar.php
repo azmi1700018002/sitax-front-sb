@@ -60,21 +60,27 @@ function isActive($link)
         if (isset($menuItem['MenuIDfk']) && is_array($menuItem['MenuIDfk'])) {
             $allowedGroupIDs = array_column($menuItem['MenuIDfk'], 'GroupID');
             if (in_array($_SESSION["GroupID"], $allowedGroupIDs)):
+                $menuID = $menuItem['MenuID'];
                 ?>
     <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item <?php echo isActive($menuItem['MenuLink']); ?>">
-        <a class="nav-link" href="<?php echo $menuItem['MenuLink']; ?>">
-            <i class="<?php echo $menuItem['MenuIcon']; ?>"></i>
-            <span>
-                <?php echo $menuItem['MenuNama']; ?>
-            </span>
-        </a>
+        <form method="post" action="<?php echo $menuItem['MenuLink']; ?>">
+            <input type="hidden" name="menuID" value="<?php echo $menuID; ?>">
+            <a class="nav-link" href="javascript:void(0);" onclick="this.parentNode.submit(); return false;">
+                <i class="<?php echo $menuItem['MenuIcon']; ?>"></i>
+                <span>
+                    <?php echo $menuItem['MenuNama']; ?>
+                </span>
+            </a>
+            <input type="submit" style="display:none;">
+        </form>
     </li>
+
     <?php endif; ?>
     <?php } ?>
     <?php endforeach; ?>
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    <div class=" text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
 </ul>
