@@ -99,13 +99,45 @@ if (isset($data2["data"])) {
                 echo '<i class="far fa-eye"></i>';
                 echo '</a>';
 
+                // Loop through each menu item in the data
+                foreach ($data["data"] as $menuItem) {
+                    $showButtons = false; // Flag to determine whether to show buttons or not
+
+                    foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                        // Check if MenuID, GroupID, and IsDeleted condition matches
+                        if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                            if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+                                $showButtons = true;
+                            }
+                            break; // No need to continue checking other MenuIDfk entries for this menu item
+                        }
+                    }
+
+                    if ($showButtons) {
+
+                        if ($menuIDfk["IsDeleted"] === "1") {
+                            echo '<button type="submit" class="btn btn-danger btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' .
+                                $panduanPjk["PanduanPajakID"] .
+                                '"><i class="fas fa-trash"></i></button>';
+                        }
+
+                        if ($menuIDfk["IsUpdated"] === "1") {
+                            echo '<button type="submit" class="btn btn-warning btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPanduanPajak' .
+                                $panduanPjk["PanduanPajakID"] .
+                                '"><i class="fas fa-edit"></i></button>';
+                        }
+
+                    }
+                }
+
                 // Edit Button
-                echo '<button type="button" class="btn btn-warning btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
-                echo '<i class="fas fa-edit"></i>';
-                echo '</button>';
-                echo '<div class="modal fade" id="editPanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="editPanduanPajak" aria-hidden="true">';
+                // echo '<button type="button" class="btn btn-warning btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
+                // echo '<i class="fas fa-edit"></i>';
+                // echo '</button>';
+
                 // Edit Modal Content
-                echo '   <div class="modal-dialog">
+                echo '<div class="modal fade" id="editPanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="editPanduanPajak" aria-hidden="true">
+               <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editPanduanPajak">Edit pajak</h5>
@@ -187,7 +219,7 @@ if (isset($data2["data"])) {
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-success">Edit</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </div>
             </form>
         </div>
@@ -196,12 +228,13 @@ if (isset($data2["data"])) {
 
                 echo '</div>';
                 // Delete Button
-                echo '<button type="button" class="btn btn-danger btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
-                echo '<i class="fas fa-trash"></i>';
-                echo '</button>';
-                echo '<div class="modal fade" id="deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="deletePanduanPajak" aria-hidden="true">';
+                // echo '<button type="button" class="btn btn-danger btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '">';
+                // echo '<i class="fas fa-trash"></i>';
+                // echo '</button>';
+
                 // Delete Modal Content
-                echo '<div class="modal-dialog">
+                echo '<div class="modal fade" id="deletePanduanPajak' . $panduanPjk['PanduanPajakID'] . '" tabindex="-1" aria-labelledby="deletePanduanPajak" aria-hidden="true">
+               <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="deletePanduanPajak">Delete Panduan Pajak</h5>

@@ -44,11 +44,37 @@ Swal.fire({
                         <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
                     </ol>
                 </nav>
-                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+
+                <?php
+                $groupIDToCheck = $_SESSION["GroupID"];
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menuID'])) {
+                    $menuID = $_POST['menuID'];
+
+                    // Loop through each menu item in the data
+                    foreach ($data["data"] as $menuItem) {
+                        foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                            // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                            if ($menuIDfk["IsCreated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                // Add the button HTML
+                                echo '
+                                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+                                data-toggle="modal" data-target="#tambahPanduanPajak">
+                                <i class="fas fa-plus me-2"></i>
+                                Panduan Pajak
+                            </button>';
+                                break; // No need to continue checking other MenuIDfk entries for this menu item
+                            }
+                        }
+                    }
+                }
+                ?>
+
+                <!-- <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahPanduanPajak">
                     <i class="fas fa-plus me-2"></i>
                     Panduan Pajak
-                </button>
+                </button> -->
 
                 <div class="container mt-4">
                     <form class="form-inline mb-2" action="" method="GET">

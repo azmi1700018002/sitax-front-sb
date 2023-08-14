@@ -80,7 +80,19 @@ Swal.fire({
                                 <th class="text-center">Ket Pajak</th>
                                 <th class="text-center">Sts Parent</th>
                                 <th class="text-center">ID File</th>
-                                <th class="text-center">Actions</th>
+                                <?php
+                                // Loop through each menu item in the data
+                                foreach ($data["data"] as $menuItem) {
+                                    foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                                        // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                                        if ($menuIDfk["IsUpdated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck || $menuIDfk["IsDeleted"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                            // Add the button HTML
+                                            echo '<th class="text-center all">Actions</th>';
+                                            break; // No need to continue checking other MenuIDfk entries for this menu item
+                                        }
+                                    }
+                                }
+                                ?>
                             </tr>
                         </thead>
                         <tbody>

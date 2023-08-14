@@ -43,11 +43,36 @@ Swal.fire({
                         <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
                     </ol>
                 </nav>
-                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+                <?php
+                $groupIDToCheck = $_SESSION["GroupID"];
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menuID'])) {
+                    $menuID = $_POST['menuID'];
+
+                    // Loop through each menu item in the data
+                    foreach ($data["data"] as $menuItem) {
+                        foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                            // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                            if ($menuIDfk["IsCreated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                // Add the button HTML
+                                echo '
+                                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+                                data-toggle="modal" data-target="#tambahPajakDetail">
+                                <i class="fas fa-plus me-2"></i>
+                                Detail Pajak
+                            </button>';
+                                break; // No need to continue checking other MenuIDfk entries for this menu item
+                            }
+                        }
+                    }
+                }
+                ?>
+
+                <!-- <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahPajakDetail">
                     <i class="fas fa-plus me-2"></i>
                     Detail Pajak
-                </button>
+                </button> -->
 
                 <div class="my-4 table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -61,7 +86,19 @@ Swal.fire({
                                 <th class="text-center">Pph Final</th>
                                 <th class="text-center">Pajak Lain</th>
                                 <th class="text-center">Keterangan</th>
-                                <th class="text-center">Actions</th>
+                                <?php
+                                // Loop through each menu item in the data
+                                foreach ($data["data"] as $menuItem) {
+                                    foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                                        // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                                        if ($menuIDfk["IsUpdated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck || $menuIDfk["IsDeleted"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                            // Add the button HTML
+                                            echo '<th class="text-center all">Actions</th>';
+                                            break; // No need to continue checking other MenuIDfk entries for this menu item
+                                        }
+                                    }
+                                }
+                                ?>
                             </tr>
                         </thead>
                         <tbody>

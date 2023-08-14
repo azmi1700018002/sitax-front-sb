@@ -70,12 +70,41 @@ if (isset($data2["data"])) {
       } else {
         echo "<td class='text-center'>Tidak Diketahui</td>"; // Tampilkan pesan jika tidak ada keterangan yang sesuai
       }
-      echo '<td>
-    <div class="d-flex justify-content-center">
-    <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteFile' .
-        $file["FileID"] .
-        '"><i class="fas fa-trash"></i> </button>
-    <div class="modal fade" id="deleteFile' .
+
+      // Loop through each menu item in the data
+      foreach ($data["data"] as $menuItem) {
+        $showButtons = false; // Flag to determine whether to show buttons or not
+
+        foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+          // Check if MenuID, GroupID, and IsDeleted condition matches
+          if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+            if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+              $showButtons = true;
+            }
+            break; // No need to continue checking other MenuIDfk entries for this menu item
+          }
+        }
+
+        if ($showButtons) {
+          echo '<td>
+<div class="d-flex justify-content-center">';
+
+          if ($menuIDfk["IsDeleted"] === "1") {
+            echo '<button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteFile' .
+              $file["FileID"] .
+              '"><i class="fas fa-trash"></i></button>';
+          }
+
+          if ($menuIDfk["IsUpdated"] === "1") {
+            echo '<button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editFile' .
+              $file["FileID"] .
+              '"><i class="fas fa-edit"></i></button>';
+          }
+
+          echo '</div></td>';
+        }
+      }
+      echo '<div class="modal fade" id="deleteFile' .
         $file["FileID"] .
         '" tabindex="-1" aria-labelledby="deleteFile" aria-hidden="true">
 <div class="modal-dialog">
@@ -99,9 +128,7 @@ if (isset($data2["data"])) {
 </div>
 </div>
 </div> 
-<button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editFile' .
-        $file["FileID"] .
-        '">  <i class="fas fa-edit"></i> </button>
+
     <div class="modal fade" id="editFile' .
         $file["FileID"] .
         '" tabindex="-1" aria-labelledby="editFile" aria-hidden="true">
@@ -170,13 +197,12 @@ if (isset($data2["data"])) {
 
             <div class="modal-footer">
             <input class="btn btn-primary" type="reset" value="Reset">
-                <button type="submit" class="btn btn-success">Edit</button>
+                <button type="submit" class="btn btn-primary">Edit</button>
             </div>
             </form>
         </div>
     </div>
-</div>
-    </td>';
+</div>';
       echo "</tr>";
       $nomor++; // increment the variable
     }

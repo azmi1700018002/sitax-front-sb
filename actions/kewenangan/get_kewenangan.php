@@ -239,7 +239,7 @@ if (isset($data3["data"])) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-success">Edit</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
                         </div>
                         </form>
                     </div>

@@ -3,28 +3,28 @@
 
 <!-- Sweet Alert Success User -->
 <?php if (isset($_SESSION["message_user_success"])) { ?>
-<script>
-Swal.fire({
-    icon: 'success',
-    title: '<?php echo $_SESSION["message_user_success"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_user_success"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '<?php echo $_SESSION["message_user_success"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_user_success"]); ?>
 <?php } ?>
 
 <!-- Sweet Alert Faield User -->
 <?php if (isset($_SESSION["message_user_failed"])) { ?>
-<script>
-Swal.fire({
-    icon: 'error',
-    title: '<?php echo $_SESSION["message_user_failed"]; ?>',
-    showConfirmButton: false,
-    timer: 8000
-});
-</script>
-<?php unset($_SESSION["message_user_failed"]); ?>
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: '<?php echo $_SESSION["message_user_failed"]; ?>',
+            showConfirmButton: false,
+            timer: 8000
+        });
+    </script>
+    <?php unset($_SESSION["message_user_failed"]); ?>
 <?php } ?>
 
 <!-- Page Wrapper -->
@@ -43,11 +43,35 @@ Swal.fire({
                         <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
                     </ol>
                 </nav>
-                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+                <?php
+                $groupIDToCheck = $_SESSION["GroupID"];
+
+                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menuID'])) {
+                    $menuID = $_POST['menuID'];
+
+                    // Loop through each menu item in the data
+                    foreach ($data["data"] as $menuItem) {
+                        foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                            // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                            if ($menuIDfk["IsCreated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                // Add the button HTML
+                                echo '
+                                <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
+                                data-toggle="modal" data-target="#tambahUser">
+                                <i class="fas fa-plus me-2"></i>
+                                User
+                            </button>';
+                                break; // No need to continue checking other MenuIDfk entries for this menu item
+                            }
+                        }
+                    }
+                }
+                ?>
+                <!-- <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
                     data-toggle="modal" data-target="#tambahUser">
                     <i class="fas fa-plus me-2"></i>
                     User
-                </button>
+                </button> -->
 
                 <div class="my-4 table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -59,7 +83,19 @@ Swal.fire({
                                 <th class="text-center">HostIP</th>
                                 <th class="text-center">Kd Kantor</th>
                                 <th class="text-center">StsUser</th>
-                                <th class="text-center">Actions</th>
+                                <?php
+                                // Loop through each menu item in the data
+                                foreach ($data["data"] as $menuItem) {
+                                    foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                                        // Check if IsCreated is 1 and MenuID matches current page's MenuID
+                                        if ($menuIDfk["IsUpdated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck || $menuIDfk["IsDeleted"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                            // Add the button HTML
+                                            echo '<th class="text-center all">Actions</th>';
+                                            break; // No need to continue checking other MenuIDfk entries for this menu item
+                                        }
+                                    }
+                                }
+                                ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -291,45 +327,45 @@ Swal.fire({
 
                     <!-- limit textarea form tambah -->
                     <script>
-                    $(document).ready(function() {
-                        $('#limittambahDeskripsi').on('input propertychange', function() {
-                            charLimitTambah(this, 50);
+                        $(document).ready(function () {
+                            $('#limittambahDeskripsi').on('input propertychange', function () {
+                                charLimitTambah(this, 50);
+                            });
                         });
-                    });
 
-                    function charLimitTambah(input, maxChar) {
-                        var len = $(input).val().length;
-                        $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
+                        function charLimitTambah(input, maxChar) {
+                            var len = $(input).val().length;
+                            $('#textCounterTambah').text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            $('#textCounterTambah').text('0 karakter tersisa');
-                        } else {
-                            $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+                            if (len > maxChar) {
+                                $(input).val($(input).val().substring(0, maxChar));
+                                $('#textCounterTambah').text('0 karakter tersisa');
+                            } else {
+                                $('#textCounterTambah').text(maxChar - len + ' karakter tersisa');
+                            }
                         }
-                    }
                     </script>
 
                     <!-- limit textarea form edit -->
                     <script>
-                    $(document).ready(function() {
-                        $('.editDeskripsi').on('input propertychange', function() {
-                            charLimit(this, 50);
+                        $(document).ready(function () {
+                            $('.editDeskripsi').on('input propertychange', function () {
+                                charLimit(this, 50);
+                            });
                         });
-                    });
 
-                    function charLimit(input, maxChar) {
-                        var len = $(input).val().length;
-                        var counter = $(input).closest('.modal-body').find('.charNum');
-                        counter.text(len + ' dari ' + maxChar + ' karakter');
+                        function charLimit(input, maxChar) {
+                            var len = $(input).val().length;
+                            var counter = $(input).closest('.modal-body').find('.charNum');
+                            counter.text(len + ' dari ' + maxChar + ' karakter');
 
-                        if (len > maxChar) {
-                            $(input).val($(input).val().substring(0, maxChar));
-                            counter.text('0 karakter tersisa');
-                        } else {
-                            counter.text(maxChar - len + ' karakter tersisa');
+                            if (len > maxChar) {
+                                $(input).val($(input).val().substring(0, maxChar));
+                                counter.text('0 karakter tersisa');
+                            } else {
+                                counter.text(maxChar - len + ' karakter tersisa');
+                            }
                         }
-                    }
                     </script>
                 </div>
             </div>

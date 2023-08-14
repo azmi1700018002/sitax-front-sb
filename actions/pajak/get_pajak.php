@@ -71,25 +71,38 @@ if (isset($data2["data"])) {
             echo "<td class='text-center'>" . $pajak["KetPajak"] . "</td>";
             echo "<td class='text-center'>" . $pajak["StsParent"] . "</td>";
             echo "<td class='text-center'>" . $pajak["FileID"] . "</td>";
-            echo '<td>
-        <div class="d-flex justify-content-center">';
 
             // Loop through each menu item in the data
             foreach ($data["data"] as $menuItem) {
+                $showButtons = false; // Flag to determine whether to show buttons or not
+
                 foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
-                    // Check if IsCreated is 1 and MenuID matches current page's MenuID
-                    if (
-                        $menuIDfk["IsDeleted"] === "1" &&
-                        $menuIDfk["MenuID"] === $menuID &&
-                        $menuIDfk["GroupID"] === $groupIDToCheck
-                    ) {
-                        // Add the button HTML
-                        echo '
-                    <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
-                            $pajak["PajakID"] .
-                            '"><i class="fas fa-trash"></i> </button>';
+                    // Check if MenuID, GroupID, and IsDeleted condition matches
+                    if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                        if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+                            $showButtons = true;
+                        }
                         break; // No need to continue checking other MenuIDfk entries for this menu item
                     }
+                }
+
+                if ($showButtons) {
+                    echo '<td>
+<div class="d-flex justify-content-center">';
+
+                    if ($menuIDfk["IsDeleted"] === "1") {
+                        echo '<button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deletePajak' .
+                            $pajak["PajakID"] .
+                            '"><i class="fas fa-trash"></i></button>';
+                    }
+
+                    if ($menuIDfk["IsUpdated"] === "1") {
+                        echo '<button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
+                            $pajak["PajakID"] .
+                            '"><i class="fas fa-edit"></i></button>';
+                    }
+
+                    echo '</div></td>';
                 }
             }
 
@@ -116,27 +129,8 @@ if (isset($data2["data"])) {
       </div>
     </div>
     </div>
-    </div>';
-            // Loop through each menu item in the data
-            foreach ($data["data"] as $menuItem) {
-                foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
-                    // Check if IsCreated is 1 and MenuID matches current page's MenuID
-                    if (
-                        $menuIDfk["IsUpdated"] === "1" &&
-                        $menuIDfk["MenuID"] === $menuID &&
-                        $menuIDfk["GroupID"] === $groupIDToCheck
-                    ) {
-                        // Add the button HTML
-                        echo '
-                <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editPajak' .
-                            $pajak["PajakID"] .
-                            '">  <i class="fas fa-edit"></i> </button>';
-                        break; // No need to continue checking other MenuIDfk entries for this menu item
-                    }
-                }
-            }
-
-            echo '<div class="modal fade" id="editPajak' .
+    </div>
+           <div class="modal fade" id="editPajak' .
                 $pajak["PajakID"] .
                 '" tabindex="-1" aria-labelledby="editPajak" aria-hidden="true">
             <div class="modal-dialog">
@@ -232,13 +226,12 @@ if (isset($data2["data"])) {
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Edit</button>
+                        <button type="submit" class="btn btn-primary">Edit</button>
                     </div>
                     </form>
                 </div>
             </div>
-        </div>
-    </td>';
+        </div>';
             echo "</tr>";
             $nomor++;
         }

@@ -68,12 +68,41 @@ if (isset($data2["data"])) {
             } else {
                 echo "<td class='text-center'>Tidak Diketahui</td>"; // Tampilkan pesan jika tidak ada keterangan yang sesuai
             }
-            echo '<td>
-            <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteUser' .
-                $user["Username"] .
-                '"><i class="fas fa-trash"></i> </button>
-          <div class="modal fade" id="deleteUser' .
+
+            // Loop through each menu item in the data
+            foreach ($data["data"] as $menuItem) {
+                $showButtons = false; // Flag to determine whether to show buttons or not
+
+                foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                    // Check if MenuID, GroupID, and IsDeleted condition matches
+                    if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                        if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+                            $showButtons = true;
+                        }
+                        break; // No need to continue checking other MenuIDfk entries for this menu item
+                    }
+                }
+
+                if ($showButtons) {
+                    echo '<td>
+    <div class="d-flex justify-content-center">';
+
+                    if ($menuIDfk["IsDeleted"] === "1") {
+                        echo '<button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteUser' .
+                            $user["Username"] .
+                            '"><i class="fas fa-trash"></i></button>';
+                    }
+
+                    if ($menuIDfk["IsUpdated"] === "1") {
+                        echo '<button type="submit" class="btn btn-warning btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#editUser' .
+                            $user["Username"] .
+                            '"><i class="fas fa-edit"></i></button>';
+                    }
+
+                    echo '</div></td>';
+                }
+            }
+            echo '<div class="modal fade" id="deleteUser' .
                 $user["Username"] .
                 '" tabindex="-1" aria-labelledby="deleteUser" aria-hidden="true">
     <div class="modal-dialog">
@@ -98,9 +127,6 @@ if (isset($data2["data"])) {
     </div>
     </div>  
     
-                <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editUser' .
-                $user["Username"] .
-                '">  <i class="fas fa-edit"></i> </button>
                 <div class="modal fade" id="editUser' .
                 $user["Username"] .
                 '" tabindex="-1" aria-labelledby="editUser" aria-hidden="true">
@@ -182,13 +208,12 @@ if (isset($data2["data"])) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                            <button type="submit" class="btn btn-success">Edit</button>
+                            <button type="submit" class="btn btn-primary">Edit</button>
                         </div>
                         </form>
                     </div>
                 </div>
-            </div>
-        </td>';
+            </div>';
             echo "</tr>";
             $nomor++;
         }

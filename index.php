@@ -12,7 +12,7 @@
     <meta name="author" content="">
 
     <title>Login Sitax</title>
-
+    <link rel="icon" href="assets/img/logo.png" type="image/x-icon" />
     <!-- Custom fonts for this template-->
     <link href="assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -32,15 +32,15 @@
 
 <body class="bg-gradient-primary">
     <?php if (isset($_SESSION["login_error"])) { ?>
-    <script>
-    Swal.fire({
-        icon: 'error',
-        title: '<?php echo $_SESSION["login_error"]; ?>',
-        showConfirmButton: false,
-        timer: 8000
-    });
-    </script>
-    <?php unset($_SESSION["login_error"]); ?>
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: '<?php echo $_SESSION["login_error"]; ?>',
+                showConfirmButton: false,
+                timer: 8000
+            });
+        </script>
+        <?php unset($_SESSION["login_error"]); ?>
     <?php } ?>
     <div class="container">
 
