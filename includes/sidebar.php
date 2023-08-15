@@ -54,34 +54,79 @@ function isActive($link)
     <!-- Heading -->
     <div class="sidebar-heading">Interface</div>
 
-    <?php foreach ($menuData as $menuItem): ?>
     <?php
-        // Check if the menu item has 'AllowedGroupIDs' information and if it is allowed for the user's GroupID
-        if (isset($menuItem['MenuIDfk']) && is_array($menuItem['MenuIDfk'])) {
-            $allowedGroupIDs = array_column($menuItem['MenuIDfk'], 'GroupID');
-            if (in_array($_SESSION["GroupID"], $allowedGroupIDs)):
-                $menuID = $menuItem['MenuID'];
-                ?>
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item <?php echo isActive($menuItem['MenuLink']); ?>">
-        <form method="post" action="<?php echo $menuItem['MenuLink']; ?>">
-            <input type="hidden" name="menuID" value="<?php echo $menuID; ?>">
-            <a class="nav-link" href="javascript:void(0);" onclick="this.parentNode.submit(); return false;">
-                <i class="<?php echo $menuItem['MenuIcon']; ?>"></i>
-                <span>
-                    <?php echo $menuItem['MenuNama']; ?>
-                </span>
-            </a>
-            <input type="submit" style="display:none;">
-        </form>
-    </li>
+    $parentItems = [];
+    $childItems = [];
 
-    <?php endif; ?>
-    <?php } ?>
-    <?php endforeach; ?>
+    foreach ($menuData as $menuItem) {
+        if ($menuItem['ParentID'] === "0000") {
+            $parentItems[] = $menuItem;
+        } else {
+            $childItems[] = $menuItem;
+        }
+    }
+
+    $childItemsByParent = [];
+    foreach ($childItems as $childItem) {
+        if (!isset($childItemsByParent[$childItem['ParentID']])) {
+            $childItemsByParent[$childItem['ParentID']] = [];
+        }
+        $childItemsByParent[$childItem['ParentID']][] = $childItem;
+    }
+
+    foreach ($parentItems as $parentItem) {
+        if (isset($parentItem['MenuIDfk']) && is_array($parentItem['MenuIDfk'])) {
+            $allowedGroupIDs = array_column($parentItem['MenuIDfk'], 'GroupID');
+            if (in_array($_SESSION["GroupID"], $allowedGroupIDs)) {
+                $parentMenuID = $parentItem['MenuID'];
+                $hasChildItems = isset($childItemsByParent[$parentMenuID]);
+                $isActiveParent = isActive($parentItem['MenuLink']);
+
+                // Tambahkan kode berikut untuk menyimpan MenuID dalam session
+                if ($isActiveParent) {
+                    $_SESSION['activeMenuID'] = $parentMenuID;
+                }
+                ?>
+                <li class="nav-item <?php echo $isActiveParent; ?>">
+                    <a class="nav-link <?php echo $hasChildItems ? 'collapsed' : ''; ?>" <?php if ($hasChildItems): ?> href="#"
+                            data-toggle="collapse" data-target="#collapse<?php echo $parentMenuID; ?>" <?php else: ?>
+                            href="<?php echo $parentItem['MenuLink']; ?>" <?php endif; ?>
+                        aria-expanded="<?php echo $isActiveParent ? 'true' : 'false'; ?>"
+                        aria-controls="collapse<?php echo $parentMenuID; ?>">
+                        <i class="<?php echo $parentItem['MenuIcon']; ?>"></i>
+                        <span>
+                            <?php echo $parentItem['MenuNama']; ?>
+                        </span>
+                    </a>
+                    <?php if ($hasChildItems): ?>
+                        <div id="collapse<?php echo $parentMenuID; ?>" class="collapse <?php echo $isActiveParent ? 'show' : ''; ?>"
+                            aria-labelledby="heading<?php echo $parentMenuID; ?>" data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <?php foreach ($childItemsByParent[$parentMenuID] as $childItem): ?>
+                                    <?php
+                                    $childMenuID = $childItem['MenuID']; // Mendapatkan MenuID dari childItem
+                                    ?>
+                                    <a class="collapse-item <?php echo isActive($childItem['MenuLink']); ?>"
+                                        href="<?php echo $childItem['MenuLink']; ?>">
+                                        <?php echo $childItem['MenuNama']; ?>
+                                    </a>
+                                    <?php
+                                    if (isActive($childItem['MenuLink'])) {
+                                        $_SESSION['activeMenuID'] = $childMenuID; // Mengatur activeMenuID dengan childMenuID
+                                    }
+                                    ?>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                </li>
+            <?php }
+        }
+    }
+    ?>
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class=" text-center d-none d-md-inline">
+    <!-- <div class=" text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div> -->
 </ul>
 <!-- End of Sidebar -->

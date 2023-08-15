@@ -42,7 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION["message_group_failed"] = "Gagal menambahkan Group";
     }
 
-    // Redirect to group.php using header
     header("Location: ../../pages/group.php");
     exit();
 }

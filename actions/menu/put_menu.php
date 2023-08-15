@@ -16,7 +16,7 @@ $token = "Bearer " . $_SESSION["token"];
 $headers = ["Authorization: " . $token];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $menu_id = $_POST["MenuID"]; 
+    $menu_id = $_POST["MenuID"];
     $MenuNama = $_POST["MenuNama"];
     $MenuLink = $_POST["MenuLink"];
     $MenuDeskripsi = $_POST["MenuDeskripsi"];
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $ParentID = $_POST["ParentID"];
     $ParentSts = $_POST["ParentSts"];
     $NoUrut = $_POST["NoUrut"];
-  
+
     $post_data = [
         "MenuID" => $menu_id,
         "MenuNama" => $MenuNama,
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $response = curl_exec($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    
+
     curl_close($ch);
 
     if ($http_code === 200) {

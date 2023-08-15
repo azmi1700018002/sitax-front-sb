@@ -43,17 +43,27 @@ Swal.fire({
                         <li class="breadcrumb-item active" aria-current="page">Data yang ditampilkan</li>
                     </ol>
                 </nav>
+
                 <?php
                 $groupIDToCheck = $_SESSION["GroupID"];
 
-                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menuID'])) {
-                    $menuID = $_POST['menuID'];
+                // Check if activeMenuID is set in the session
+                if (isset($_SESSION['activeMenuID'])) {
+                    $activeMenuID = $_SESSION['activeMenuID'];
+                    // var_dump($activeMenuID);
 
                     // Loop through each menu item in the data
                     foreach ($data["data"] as $menuItem) {
                         foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
                             // Check if IsCreated is 1 and MenuID matches current page's MenuID
-                            if ($menuIDfk["IsCreated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                            if (
+                                isset($menuIDfk["IsCreated"]) &&
+                                isset($menuIDfk["MenuID"]) &&
+                                isset($menuIDfk["GroupID"]) &&
+                                $menuIDfk["IsCreated"] === "1" &&
+                                $menuIDfk["MenuID"] === $activeMenuID &&
+                                $menuIDfk["GroupID"] === $groupIDToCheck
+                            ) {
                                 // Add the button HTML
                                 echo '
                                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
@@ -65,6 +75,8 @@ Swal.fire({
                             }
                         }
                     }
+                } else {
+                    echo "No active menu selected.";
                 }
                 ?>
 
@@ -91,7 +103,7 @@ Swal.fire({
                                 foreach ($data["data"] as $menuItem) {
                                     foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
                                         // Check if IsCreated is 1 and MenuID matches current page's MenuID
-                                        if ($menuIDfk["IsUpdated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck || $menuIDfk["IsDeleted"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                                        if ($menuIDfk["IsUpdated"] === "1" && $menuIDfk["MenuID"] === $activeMenuID && $menuIDfk["GroupID"] === $groupIDToCheck || $menuIDfk["IsDeleted"] === "1" && $menuIDfk["MenuID"] === $activeMenuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
                                             // Add the button HTML
                                             echo '<th class="text-center all">Actions</th>';
                                             break; // No need to continue checking other MenuIDfk entries for this menu item

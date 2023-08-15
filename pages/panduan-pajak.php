@@ -48,14 +48,23 @@ Swal.fire({
                 <?php
                 $groupIDToCheck = $_SESSION["GroupID"];
 
-                if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['menuID'])) {
-                    $menuID = $_POST['menuID'];
+                // Check if activeMenuID is set in the session
+                if (isset($_SESSION['activeMenuID'])) {
+                    $activeMenuID = $_SESSION['activeMenuID'];
+                    // var_dump($activeMenuID);
 
                     // Loop through each menu item in the data
                     foreach ($data["data"] as $menuItem) {
                         foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
                             // Check if IsCreated is 1 and MenuID matches current page's MenuID
-                            if ($menuIDfk["IsCreated"] === "1" && $menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                            if (
+                                isset($menuIDfk["IsCreated"]) &&
+                                isset($menuIDfk["MenuID"]) &&
+                                isset($menuIDfk["GroupID"]) &&
+                                $menuIDfk["IsCreated"] === "1" &&
+                                $menuIDfk["MenuID"] === $activeMenuID &&
+                                $menuIDfk["GroupID"] === $groupIDToCheck
+                            ) {
                                 // Add the button HTML
                                 echo '
                                 <button type="button" class="btn btn-outline-primary ms-auto" data-ripple-color="dark"
@@ -67,6 +76,8 @@ Swal.fire({
                             }
                         }
                     }
+                } else {
+                    echo "No active menu selected.";
                 }
                 ?>
 
@@ -279,7 +290,7 @@ Swal.fire({
                             var pdfIframe = document.createElement('iframe');
                             pdfIframe.src = pdfURL;
                             pdfIframe.width = '100%';
-                            pdfIframe.height = '500';
+                            pdfIframe.height = '550';
                             pdfIframe.frameBorder = '0';
 
                             modalBody.innerHTML = '';
@@ -305,7 +316,7 @@ Swal.fire({
                             var pdfURL = '';
                             for (var i = 0; i < fileData.length; i++) {
                                 if (fileData[i]['FileID'] === fileID) {
-                                    pdfURL = '../../Sitax/file/' + fileData[i]['FileJudul'];
+                                    pdfURL = '../../SitaxUpdate/file/' + fileData[i]['FileJudul'];
                                     break;
                                 }
                             }

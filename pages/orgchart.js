@@ -214,7 +214,7 @@ var OrgChart = function (t, e) {
     columns: 10,
     padding: 30,
     orientation: OrgChart.orientation.top,
-    layout: OrgChart.normal,
+    layout: OrgChart.layout.normal,
     scaleInitial: 1,
     scaleMin: 0.1,
     scaleMax: 5,
@@ -239,34 +239,34 @@ var OrgChart = function (t, e) {
     zoom: { speed: 120, smooth: 12 },
     roots: null,
     state: null,
-    editForm: {
-      readOnly: !1,
-      titleBinding: "name",
-      photoBinding: "img",
-      addMore: "Add more fields",
-      addMoreBtn: "Add",
-      addMoreFieldName: "Field name",
-      saveAndCloseBtn: "Save and close",
-      cancelBtn: "Cancel",
-      generateElementsFromFields: !0,
-      focusBinding: null,
-      //   buttons: {
-      //     edit: {
-      //       icon: OrgChart.icon.edit(24, 24, "#fff"),
-      //       text: "Edit",
-      //       hideIfEditMode: !0,
-      //       hideIfDetailsMode: !1,
-      //     },
-      //     share: { icon: OrgChart.icon.share(24, 24, "#fff"), text: "Share" },
-      //     pdf: { icon: OrgChart.icon.pdf(24, 24, "#fff"), text: "Save as PDF" },
-      //     remove: {
-      //       icon: OrgChart.icon.remove(24, 24, "#fff"),
-      //       text: "Remove",
-      //       hideIfDetailsMode: !0,
-      //     },
-      //   },
-      elements: [],
-    },
+    // editForm: {
+    //   readOnly: !1,
+    //   titleBinding: "name",
+    //   photoBinding: "img",
+    //   addMore: "Add more fields",
+    //   addMoreBtn: "Add",
+    //   addMoreFieldName: "Field name",
+    //   saveAndCloseBtn: "Save and close",
+    //   cancelBtn: "Cancel",
+    //   generateElementsFromFields: !0,
+    //   focusBinding: null,
+    //   buttons: {
+    //     edit: {
+    //       icon: OrgChart.icon.edit(24, 24, "#fff"),
+    //       text: "Edit",
+    //       hideIfEditMode: !0,
+    //       hideIfDetailsMode: !1,
+    //     },
+    //     share: { icon: OrgChart.icon.share(24, 24, "#fff"), text: "Share" },
+    //     pdf: { icon: OrgChart.icon.pdf(24, 24, "#fff"), text: "Save as PDF" },
+    //     remove: {
+    //       icon: OrgChart.icon.remove(24, 24, "#fff"),
+    //       text: "Remove",
+    //       hideIfDetailsMode: !0,
+    //     },
+    //   },
+    //   elements: [],
+    // },
   };
 }),
   (OrgChart.prototype.load = function (t, e) {
@@ -1224,7 +1224,7 @@ var OrgChart = function (t, e) {
     }
   }),
   void 0 === OrgChart && (OrgChart = {}),
-  (OrgChart.VERSION = "8.11.06"),
+  (OrgChart.VERSION = "8.11.10"),
   (OrgChart.orientation = {}),
   (OrgChart.orientation.top = 0),
   (OrgChart.orientation.bottom = 1),
@@ -1310,6 +1310,8 @@ var OrgChart = function (t, e) {
   (OrgChart.layout.tree = OrgChart.tree = 2),
   (OrgChart.layout.treeLeftOffset = OrgChart.treeLeftOffset = 3),
   (OrgChart.layout.treeRightOffset = OrgChart.treeRightOffset = 4),
+  (OrgChart.layout.treeLeft = 5),
+  (OrgChart.layout.treeRight = 6),
   (OrgChart.nodeOpenTag =
     "<g " +
     OrgChart.attr.node_id +
@@ -1750,7 +1752,7 @@ var OrgChart = function (t, e) {
         b,
         u,
         f
-      )}\n</div>${(function () {
+      )}\n                        </div>\n                        <div data-boc-edit-from-btns class="boc-edit-form-instruments">\n                        ${(function () {
         if (a) return "";
         var t = "";
         for (var r in c) {
@@ -1803,7 +1805,7 @@ var OrgChart = function (t, e) {
   (OrgChart.editUI.renderHeaderContent = function (t, e, r, i) {
     return `<h1 class="boc-edit-form-title">${OrgChart._escapeGreaterLessSign(
       t
-    )}</h1>`;
+    )}</h1>\n                <div id="boc-avatar" class="boc-edit-form-avatar">${e}</div>`;
   }),
   (OrgChart.prototype.getSvg = function () {
     var t = this.element.getElementsByTagName("svg");
@@ -4775,7 +4777,8 @@ var OrgChart = function (t, e) {
       (this.state = null),
       (this.vbIsInitializedFromState = !1),
       (this.rootList = []),
-      (this.instance = t);
+      (this.instance = t),
+      (this._fixAdjustForExport = { x: 0, y: 0 });
   }),
   (OrgChart.manager.prototype.read = function (t, e, r, i, a, n, o, l) {
     var s = this;
@@ -4895,7 +4898,10 @@ var OrgChart = function (t, e) {
           );
           r.state &&
             r.action == OrgChart.action.init &&
-            (o = r.state.adjustify);
+            (o = r.state.adjustify),
+            r.action == OrgChart.action.exporting
+              ? (o = r._fixAdjustForExport)
+              : (r._fixAdjustForExport = o);
           for (
             var l = { minX: null, minY: null, maxX: null, maxY: null },
               s = {},
@@ -4934,7 +4940,8 @@ var OrgChart = function (t, e) {
     var i = OrgChart.t(t.templateName);
     (t.w = i && i.size ? i.size[0] : 0),
       (t.h = i && i.size ? i.size[1] : 0),
-      (t.isSplit = "split" == t.templateName);
+      (t.isSplit = "split" == t.templateName),
+      (t.isMirror = "mirror" == t.templateName);
   }),
   (OrgChart.manager._setCollpasedProperty = function (t, e, r, i, a, n, o) {
     null == t.collapsed && e.collapse && e.collapse.allChildren
@@ -5215,8 +5222,8 @@ var OrgChart = function (t, e) {
             }
           if (!u) {
             if (!OrgChart.isNEU(c.pid))
-              (z = (O = l[c.pid]).childrenIds.indexOf(c.id)) > -1 &&
-                O.childrenIds.splice(z, 1);
+              (j = (O = l[c.pid]).childrenIds.indexOf(c.id)) > -1 &&
+                O.childrenIds.splice(j, 1);
             s.push(c);
           }
         }
@@ -5405,35 +5412,35 @@ var OrgChart = function (t, e) {
     for (d = 0; d < k.length; d++) {
       if (
         (at = r[(C = l[k[d]]).lcn ? C.lcn : "base"]).layout ==
-          OrgChart.normal ||
+          OrgChart.layout.normal ||
         !S[C.pid]
       )
         for (x = 0; x < C.subLevels; x++) {
-          var z,
-            j = new OrgChart.node(
+          var j,
+            z = new OrgChart.node(
               C.id + "_sub_level_index_" + x,
               C.pid,
               [],
               "subLevel"
             );
-          if ((OrgChart.manager._initDinamicNode(j, C.lcn), (O = C.parent)))
-            (z = O.children.indexOf(C)) > -1 &&
-              (O.children.splice(z, 1), O.children.splice(z, 0, j)),
-              j.children.push(C),
-              (j.parent = O),
-              (C.parent = j),
-              (l[j.id] = j);
+          if ((OrgChart.manager._initDinamicNode(z, C.lcn), (O = C.parent)))
+            (j = O.children.indexOf(C)) > -1 &&
+              (O.children.splice(j, 1), O.children.splice(j, 0, z)),
+              z.children.push(C),
+              (z.parent = O),
+              (C.parent = z),
+              (l[z.id] = z);
         }
     }
     for (var Y in w) {
       (O = l[Y]).hasAssistants = !0;
-      j = new OrgChart.node(
+      z = new OrgChart.node(
         O.id + "_split_assitant_0",
         O.id,
         ["assistant"],
         "split"
       );
-      OrgChart.manager._initDinamicNode(j, O.lcn, !0), (l[j.id] = j);
+      OrgChart.manager._initDinamicNode(z, O.lcn, !0), (l[z.id] = z);
       var X = [];
       for (x = O.children.length - 1; x >= 0; x--) {
         (D = O.children[x]).isAssistant
@@ -5441,16 +5448,16 @@ var OrgChart = function (t, e) {
           : D.isPartner ||
             (D.parent &&
               S[D.parent.id] &&
-              j &&
-              D.parent.id != j.id &&
+              z &&
+              D.parent.id != z.id &&
               (Object.defineProperty(
                 S,
-                j.id,
+                z.id,
                 Object.getOwnPropertyDescriptor(S, D.parent.id)
               ),
               delete S[D.parent.id]),
-            (D.parent = j),
-            j.children.unshift(D),
+            (D.parent = z),
+            z.children.unshift(D),
             O.children.splice(x, 1));
       }
       if (X.length % 2) {
@@ -5477,7 +5484,7 @@ var OrgChart = function (t, e) {
             (l[G.id] = G),
             X.splice(x, 0, G.id),
             V++;
-        } else x % 2 && X.splice(x, 0, j.id);
+        } else x % 2 && X.splice(x, 0, z.id);
       for (x = 0; x < X.length; x += 3) {
         var W = null;
         W = 0 == x ? O : l[X[x - 2]];
@@ -5494,12 +5501,7 @@ var OrgChart = function (t, e) {
     }
     var Q = !1;
     for (var tt in r) {
-      if (
-        (at = r[tt]).layout == OrgChart.mixed ||
-        at.layout == OrgChart.tree ||
-        at.layout == OrgChart.treeRightOffset ||
-        at.layout == OrgChart.treeLeftOffset
-      ) {
+      if ((at = r[tt]).layout > 0) {
         Q = !0;
         break;
       }
@@ -5510,13 +5512,7 @@ var OrgChart = function (t, e) {
       for (var Y in S) {
         for (var it = (O = l[Y]); it.isSplit; ) it = l[it.pid];
         var at;
-        if (
-          (at = r[O.lcn ? O.lcn : "base"]).layout == OrgChart.mixed ||
-          at.layout == OrgChart.tree ||
-          at.layout == OrgChart.treeRightOffset ||
-          at.layout == OrgChart.treeLeftOffset ||
-          et
-        )
+        if ((at = r[O.lcn ? O.lcn : "base"]).layout > 0 || et)
           if (
             ((rt.pnode = O),
             (rt.layout = at.layout),
@@ -5524,11 +5520,11 @@ var OrgChart = function (t, e) {
             (rt.lastChildrenPidIds = S),
             OrgChart.events.publish("node-layout", [t, rt]),
             OrgChart.events.publish("layout", [rt]),
-            rt.layout == OrgChart.mixed)
+            rt.layout == OrgChart.layout.mixed)
           ) {
             var nt = rt.childrenIds;
             for (d = nt.length - 1; d >= 0; d--) {
-              (O = (D = l[nt[d]]).parent), (D.layout = OrgChart.mixed);
+              (O = (D = l[nt[d]]).parent), (D.layout = OrgChart.layout.mixed);
               for (x = O.children.length - 1; x >= 0; x--)
                 if (D.id == O.children[x].id) {
                   O.children.splice(x, 1);
@@ -5537,29 +5533,26 @@ var OrgChart = function (t, e) {
               if (d > 0) {
                 var ot = l[nt[d - 1]];
                 (D.parent = ot),
-                  (D.layout = OrgChart.mixed),
+                  (D.layout = OrgChart.layout.mixed),
                   ot.children.push(D);
               } else O.children.push(D);
             }
-          } else if (
-            rt.layout == OrgChart.tree ||
-            rt.layout == OrgChart.treeRightOffset ||
-            rt.layout == OrgChart.treeLeftOffset
-          ) {
-            j = new OrgChart.node(O.id + "_split_0", it.id, [], "split");
-            OrgChart.manager._initDinamicNode(j, O.lcn),
-              (l[j.id] = j),
-              (j.layout = OrgChart.tree);
+          } else if (rt.layout > 1) {
+            z = new OrgChart.node(O.id + "_split_0", it.id, [], "split");
+            OrgChart.manager._initDinamicNode(z, O.lcn),
+              (l[z.id] = z),
+              (z.layout = rt.layout);
             var lt = [];
             for (d = rt.childrenIds.length - 1; d >= 0; d--) {
               for (D = l[rt.childrenIds[d]], x = 0; x < O.children.length; x++)
                 O.children[x].id == D.id && O.children.splice(x, 1);
               if (
                 ((D.parent = null),
-                (D.layout = OrgChart.tree),
-                rt.layout == OrgChart.treeRightOffset && lt.splice(0, 0, D.id),
-                rt.layout == OrgChart.treeLeftOffset ||
-                  rt.layout == OrgChart.treeRightOffset)
+                (D.layout = rt.layout),
+                (rt.layout != OrgChart.layout.treeRightOffset &&
+                  rt.layout != OrgChart.layout.treeRight) ||
+                  lt.splice(0, 0, D.id),
+                rt.layout > 2)
               ) {
                 var st = new OrgChart.node(
                   D.id + "_mirror",
@@ -5568,21 +5561,23 @@ var OrgChart = function (t, e) {
                   "mirror"
                 );
                 OrgChart.manager._initDinamicNode(st, D.lcn),
-                  (st.layout = OrgChart.tree),
+                  (st.layout = rt.layout),
                   (l[st.id] = st),
                   lt.splice(0, 0, st.id);
               }
-              rt.layout != OrgChart.treeRightOffset && lt.splice(0, 0, D.id);
+              rt.layout != OrgChart.layout.treeRightOffset &&
+                rt.layout != OrgChart.layout.treeRight &&
+                lt.splice(0, 0, D.id);
             }
             for (V = 1, x = lt.length - 1; x >= 0; x--)
               if (x % 2 && x != lt.length - 1) {
                 G = new OrgChart.node(O.id + "_split_" + V, it.id, [], "split");
                 OrgChart.manager._initDinamicNode(G, O.lcn),
-                  (G.layout = OrgChart.tree),
+                  (G.layout = rt.layout),
                   (l[G.id] = G),
                   lt.splice(x, 0, G.id),
                   V++;
-              } else x % 2 && lt.splice(x, 0, j.id);
+              } else x % 2 && lt.splice(x, 0, z.id);
             for (x = 0; x < lt.length; x += 3) {
               W = null;
               0 == x && (W = O);
@@ -6854,8 +6849,7 @@ var OrgChart = function (t, e) {
         s = OrgChart.t(t.templateName, t.min, r),
         h = [],
         d = l.levelSeparation / 2;
-      (t.layout != OrgChart.mixed && t.layout != OrgChart.tree) ||
-        (d = l.mixedHierarchyNodesSeparation / 2);
+      t.layout > 0 && (d = l.mixedHierarchyNodesSeparation / 2);
       var c = 0,
         g = OrgChart.getRootOf(t).id,
         p = i[g][t.sl],
@@ -6970,11 +6964,7 @@ var OrgChart = function (t, e) {
               m.leftNeighbor &&
               m.leftNeighbor.isAssistant &&
               m.parent == m.leftNeighbor.parent;
-          if (
-            (x || 2 == m.layout) &&
-            m.rightNeighbor &&
-            m.rightNeighbor.isSplit
-          )
+          if ((x || m.layout > 1) && m.rightNeighbor && m.rightNeighbor.isSplit)
             switch (l.orientation) {
               case OrgChart.orientation.top:
               case OrgChart.orientation.top_left:
@@ -6989,7 +6979,7 @@ var OrgChart = function (t, e) {
                 b = OrgChart.ui._linkBottomToTop(m.rightNeighbor, m, s, d);
             }
           else if (
-            (y || 2 == m.layout) &&
+            (y || m.layout > 1) &&
             m.leftNeighbor &&
             m.leftNeighbor.isSplit
           )
@@ -7285,13 +7275,13 @@ var OrgChart = function (t, e) {
             t.rightNeighbor.isAssistant &&
             "split" == e.templateName
               ? t.rightNeighbor.y + t.rightNeighbor.h + i
-              : "split" != t.templateName || (!e.isAssistant && 2 != e.layout)
-              ? "split" == e.templateName
-                ? o + i
-                : null != a
-                ? a
-                : h - i
-              : h),
+              : "split" == t.templateName && (e.isAssistant || e.layout > 1)
+              ? h
+              : "split" == e.templateName
+              ? o + i
+              : null != a
+              ? a
+              : h - i),
           xc: l,
           yc: d,
           xd: s,
@@ -7323,13 +7313,13 @@ var OrgChart = function (t, e) {
             t.rightNeighbor.isAssistant &&
             "split" == e.templateName
               ? t.rightNeighbor.y - i
-              : "split" != t.templateName || (!e.isAssistant && 2 != e.layout)
-              ? "split" == e.templateName
-                ? o - i
-                : null != a
-                ? a
-                : h + i
-              : h),
+              : "split" == t.templateName && (e.isAssistant || e.layout > 1)
+              ? h
+              : "split" == e.templateName
+              ? o - i
+              : null != a
+              ? a
+              : h + i),
           xc: l,
           yc: d,
           xd: s,
@@ -7363,13 +7353,13 @@ var OrgChart = function (t, e) {
             t.rightNeighbor.isAssistant &&
             "split" == e.templateName
               ? t.rightNeighbor.x - i
-              : "split" != t.templateName || (!e.isAssistant && 2 != e.layout)
-              ? "split" == e.templateName
-                ? n - i
-                : null != a
-                ? a
-                : h + i
-              : h),
+              : "split" == t.templateName && (e.isAssistant || e.layout > 1)
+              ? h
+              : "split" == e.templateName
+              ? n - i
+              : null != a
+              ? a
+              : h + i),
           yb: l,
           xc: c,
           yc: s,
@@ -7404,13 +7394,13 @@ var OrgChart = function (t, e) {
             t.rightNeighbor.isAssistant &&
             "split" == e.templateName
               ? t.rightNeighbor.x + t.rightNeighbor.w + i
-              : "split" != t.templateName || (!e.isAssistant && 2 != e.layout)
-              ? "split" == e.templateName
-                ? n + i
-                : null != a
-                ? a
-                : h - i
-              : h),
+              : "split" == t.templateName && (e.isAssistant || e.layout > 1)
+              ? h
+              : "split" == e.templateName
+              ? n + i
+              : null != a
+              ? a
+              : h - i),
           yb: l,
           xc: c,
           yc: s,
@@ -9375,9 +9365,7 @@ var OrgChart = function (t, e) {
       }
       var p = OrgChart.t(e.templateName, e.min, i),
         u = g.levelSeparation;
-      ((e.parent && e.parent.layout == OrgChart.mixed) ||
-        (e.parent && e.parent.layout == OrgChart.tree)) &&
-        (u = g.mixedHierarchyNodesSeparation);
+      e.parent && e.parent.layout && (u = g.mixedHierarchyNodesSeparation);
       var f = {
         p: e.x + e.w / 2 + p.expandCollapseSize,
         q: e.y,
@@ -9471,68 +9459,66 @@ var OrgChart = function (t, e) {
               s.push([f.p, f.q]),
               s.push([e.x + e.w + u / 3, f.q]);
         }
-        for (var m = e; null == h; ) {
-          var C = !1,
-            b = m.parent,
-            O = b.leftNeighbor,
-            v = b.rightNeighbor;
+        for (var m = e, C = e; C.parent; ) C = C.parent;
+        for (; null == h; ) {
+          var b = !1,
+            O = m.parent,
+            v = O.leftNeighbor,
+            x = O.rightNeighbor;
           if (
-            (b.id == n.id
-              ? (h = b)
-              : OrgChart._intersects(b, f, t.config) &&
-                ((f = OrgChart._addPoint(b, s, t.config, f, d)), (C = !0)),
-            b.id != n.id)
+            (O.id == n.id
+              ? (h = O)
+              : OrgChart._intersects(O, f, t.config) &&
+                ((f = OrgChart._addPoint(O, s, t.config, f, d)), (b = !0)),
+            O.id != n.id)
           ) {
-            for (; O; ) {
-              if (O.id == n.id) {
-                h = O;
-                break;
-              }
-              OrgChart._intersects(O, f, t.config) &&
-                ((f = OrgChart._addPoint(O, s, t.config, f, d)), (C = !0)),
-                (O = O.leftNeighbor);
-            }
             for (; v; ) {
               if (v.id == n.id) {
                 h = v;
                 break;
               }
               OrgChart._intersects(v, f, t.config) &&
-                ((f = OrgChart._addPoint(v, s, t.config, f, d)), (C = !0)),
-                (v = v.rightNeighbor);
+                ((f = OrgChart._addPoint(v, s, t.config, f, d)), (b = !0)),
+                (v = v.leftNeighbor);
+            }
+            for (; x; ) {
+              if (x.id == n.id) {
+                h = x;
+                break;
+              }
+              OrgChart._intersects(x, f, t.config) &&
+                ((f = OrgChart._addPoint(x, s, t.config, f, d)), (b = !0)),
+                (x = x.rightNeighbor);
             }
           }
-          if (!C) {
-            var x = s[s.length - 1][0],
-              y = 0;
-            if (b.parent)
-              switch (
-                ((u = g.levelSeparation),
-                (b.parent.layout != OrgChart.mixed &&
-                  b.parent.layout != OrgChart.tree) ||
-                  (u = g.mixedHierarchyNodesSeparation),
-                g.orientation)
-              ) {
+          if (!b) {
+            var y = s[s.length - 1][0],
+              _ = 0;
+            if (O.parent) {
+              (u = g.levelSeparation),
+                O.parent.layout && (u = g.mixedHierarchyNodesSeparation);
+              var w = t.manager.bordersByRootIdAndLevel[C.id][O.parent.sl];
+              switch (g.orientation) {
                 case OrgChart.orientation.top:
                 case OrgChart.orientation.top_left:
-                  y = b.parent.y + b.parent.h + u * (2 / 3);
+                  _ = w.maxY + u * (2 / 3);
                   break;
                 case OrgChart.orientation.bottom:
                 case OrgChart.orientation.bottom_left:
-                  y = b.parent.y - u * (2 / 3);
+                  _ = w.minY - u * (2 / 3);
                   break;
                 case OrgChart.orientation.left:
                 case OrgChart.orientation.left_top:
-                  (x = b.parent.x + b.parent.w + u * (2 / 3)),
-                    (y = s[s.length - 1][1]);
+                  (y = w.maxX + u * (2 / 3)), (_ = s[s.length - 1][1]);
                   break;
                 case OrgChart.orientation.right:
                 case OrgChart.orientation.right_top:
-                  (x = b.parent.x - u * (2 / 3)), (y = s[s.length - 1][1]);
+                  (y = w.minX - u * (2 / 3)), (_ = s[s.length - 1][1]);
               }
-            s.push([x, y]);
+            }
+            s.push([y, _]);
           }
-          m = b;
+          m = O;
         }
         switch (
           ((p = OrgChart.t(h.templateName, h.min, i)),
@@ -9560,47 +9546,47 @@ var OrgChart = function (t, e) {
               s.push([h.x, s[s.length - 1][1]]);
         }
       }
-      var _ = l.template;
-      _ || (_ = "orange");
-      var w,
-        k,
-        S = null;
-      switch ((p = OrgChart.slinkTemplates[_]).labelPosition) {
+      var k = l.template;
+      k || (k = "orange");
+      var S,
+        I,
+        A = null;
+      switch ((p = OrgChart.slinkTemplates[k]).labelPosition) {
         case "start":
-          S = { x: s[1][0], y: s[1][1] };
+          A = { x: s[1][0], y: s[1][1] };
           break;
         case "middle":
-          var I = Math.ceil(s.length / 2);
-          (w = s[I]),
-            (k = s[I - 1]),
-            (S = { x: (w[0] + k[0]) / 2, y: (w[1] + k[1]) / 2 });
+          var E = Math.ceil(s.length / 2);
+          (S = s[E]),
+            (I = s[E - 1]),
+            (A = { x: (S[0] + I[0]) / 2, y: (S[1] + I[1]) / 2 });
           break;
         case "end":
-          S = { x: s[s.length - 2][0], y: s[s.length - 2][1] };
+          A = { x: s[s.length - 2][0], y: s[s.length - 2][1] };
       }
       o && (s = s.reverse()), (s[0] = "M" + s[0].join(","));
-      for (var A = 1; A < s.length; A++) s[A] = "L" + s[A].join(",");
-      var E = s.join(" ");
+      for (var N = 1; N < s.length; N++) s[N] = "L" + s[N].join(",");
+      var L = s.join(" ");
       if (l.label) {
-        var N = p.label
-            .replace("{x}", S.x)
-            .replace("{y}", S.y)
+        var M = p.label
+            .replace("{x}", A.x)
+            .replace("{y}", A.y)
             .replace("{val}", l.label),
-          L = OrgChart._getLabelSize(N),
-          M = -L.height / 2;
+          T = OrgChart._getLabelSize(M),
+          B = -T.height / 2;
         switch (g.orientation) {
           case OrgChart.orientation.bottom:
           case OrgChart.orientation.bottom_left:
-            M = L.height;
+            B = T.height;
         }
         r += p.label
-          .replace("{x}", S.x)
-          .replace("{y}", S.y + M)
+          .replace("{x}", A.x)
+          .replace("{y}", A.y + B)
           .replace("{val}", l.label);
       }
-      var T = e.id,
-        B = n.id;
-      o && ((T = n.id), (B = e.id)),
+      var U = e.id,
+        P = n.id;
+      o && ((U = n.id), (P = e.id)),
         (r +=
           (
             "<g " +
@@ -9609,11 +9595,11 @@ var OrgChart = function (t, e) {
             OrgChart.attr.s_link_to +
             '="{to}">'
           )
-            .replace("{from}", T)
-            .replace("{to}", B) +
-          p.link.replaceAll("{d}", E) +
+            .replace("{from}", U)
+            .replace("{to}", P) +
+          p.link.replaceAll("{d}", L) +
           '<path stroke="transparent" stroke-width="15" fill="none" d="' +
-          E +
+          L +
           '" />'),
         (r += OrgChart.grCloseTag);
     }
@@ -10753,7 +10739,7 @@ var OrgChart = function (t, e) {
     );
   }),
   (OrgChart.ui.css = function () {
-    return '<style data-boc-styles>.boc-button{background-color:#039be5;cursor:pointer;width:calc(100%);height:50px;color:#fff;padding-top:5px;padding-left:7px;padding-right:7px;text-align:center;text-transform:uppercase;border:1px solid #3fc0ff;display:inline-block;border-radius:5px}.boc-button.orange{background-color:#f57c00;border:1px solid #ffa03e}.boc-button.yellow{background-color:#ffca28;border:1px solid #ffdf7c}.boc-button.lower{text-transform:unset}.boc-button.transparent{background-color:transparent}.boc-button:hover{background-color:#35afea}.boc-button.orange:hover{background-color:#f79632}.boc-button.yellow:hover{background-color:#ffd452}.boc-button:active{transform:matrix(.98,0,0,.98,0,0)}.boc-button-icon{text-align:initial;cursor:pointer;margin-bottom:15px;color:#039be5}.boc-dark .boc-button-icon:hover{background-color:#2d2d2d}.boc-light .boc-button-icon:hover{background-color:#ececec}.boc-button-icon>img{height:24px;width:24px;vertical-align:middle;padding:7px}.boc-button:focus{outline:0}.boc-button-icon>img{filter:invert(46%) sepia(66%) saturate(2530%) hue-rotate(171deg) brightness(95%) contrast(98%)}.boc-light .boc-button.transparent{color:#039be5}.boc-light .boc-button.transparent:hover{color:#fff}.boc-button-loading{background-color:transparent;cursor:pointer;width:calc(100% - 2px);height:50px;color:#fff;text-align:center;text-transform:uppercase;border:1px solid #027cb7;display:inline-block;display:flex;justify-content:center;align-items:center;display:none}.boc-button-loading .boc-loading-dots div{margin:0 10px}.boc-link-boc-button{position:absolute;right:10px;top:-1px}@media screen and (max-width:1000px){.boc-link-boc-button{right:50px}}[data-boc-input-disabled] .boc-link-boc-button{display:none}[dir=rtl] .boc-link-boc-button{left:10px;right:unset}.boc-img-button{width:48px;height:48px;cursor:pointer;border-radius:50%;background-color:#039be5;background-repeat:no-repeat;background-size:24px 24px;background-position:center center;margin:3px;display:inline-block}.boc-img-button:hover{background-color:#f57c00}.boc-checkbox{display:block;position:relative;padding-left:35px;margin-bottom:12px;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap}.boc-checkbox input{position:absolute;opacity:0;cursor:pointer;height:0;width:0}.boc-checkbox-checkmark{position:absolute;top:0;left:0;height:25px;width:25px;border-radius:5px}.boc-dark [data-boc-input-disabled] .boc-checkbox-checkmark,.boc-dark [data-boc-input-disabled].boc-checkbox input:checked~.boc-checkbox-checkmark,.boc-light [data-boc-input-disabled] .boc-checkbox-checkmark,.boc-light [data-boc-input-disabled].boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#aeaeae!important}[data-boc-input-disabled].boc-checkbox{cursor:default}[dir=rtl] .boc-checkbox-checkmark{right:0}[dir=rtl] .boc-checkbox{padding-left:unset;padding-right:35px}.boc-dark .boc-checkbox-checkmark{background-color:#333;border:1px solid #5b5b5b}.boc-light .boc-checkbox-checkmark{background-color:#fff;border:1px solid #c7c7c7}.boc-dark .boc-checkbox:hover input~.boc-checkbox-checkmark{background-color:#3c3c3c}.boc-light .boc-checkbox:hover input~.boc-checkbox-checkmark{background-color:#f8f9f9}.boc-dark .boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#039be5}.boc-light .boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#039be5}.boc-checkbox-checkmark:after{content:"";position:absolute;display:none}.boc-checkbox input:checked~.boc-checkbox-checkmark:after{display:block}.boc-checkbox .boc-checkbox-checkmark:after{left:9px;top:5px;width:5px;height:10px;border:solid #fff;border-width:0 3px 3px 0;-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.boc-filter{user-select:none}.boc-light .boc-filter{color:#757575}.boc-dark .boc-filter{color:#ccc}.boc-filter>div>div{display:inline-block;padding:3px 10px;cursor:pointer}.boc-filter-menu fieldset,.boc-filter>div,.filter-field-selected{border-radius:5px}.boc-filter-menu fieldset{overflow-y:auto;max-height:300px}.boc-filter>div.boc-filter-menu{padding:10px}.boc-light .boc-filter>div.boc-filter-menu,.boc-light .filter-field-selected{background-color:#f8f9f9}.boc-dark .boc-filter>div.boc-filter-menu,.boc-dark .filter-field-selected{background-color:#3c3c3c}.boc-light .boc-filter>div{background-color:#eee}.boc-dark .boc-filter>div{background-color:#333}.boc-form-perspective{transform-style:preserve-3d;perspective:500px;position:absolute;top:32px}.boc-form{box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0;padding:14px;transform-origin:top center;user-select:none;display:none;position:relative;max-height:calc(100vh - 100px);overflow-y:auto;border-bottom-left-radius:5px;border-bottom-right-radius:5px}.boc-form-bottom{border-bottom-left-radius:unset;border-bottom-right-radius:unset;border-top-left-radius:5px;border-top-right-radius:5px}.boc-form .separator{margin:0 10px}@media screen and (max-width:1000px){.boc-form-perspective{min-width:100%;max-height:calc(100% - 32px);left:unset!important;right:unset!important;transform:none!important}.boc-form .set{max-height:calc(100vh - 74px)}.boc-form-fieldset{max-width:unset!important}}.boc-light .boc-form .separator{border-bottom:1px solid #c7c7c7}.boc-dark .boc-form .separator{border-bottom:1px solid #5b5b5b}.boc-light .boc-form{background-color:#fff}.boc-dark .boc-form{background-color:#252526}.boc-item{padding:6px 12px 6px 12px;display:flex;flex-direction:row}.boc-light .boc-form .boc-item.selected,.boc-light .boc-form .boc-item:hover{background-color:#0074e8;color:#fff}.boc-dark .boc-form .boc-item.selected,.boc-dark .boc-form .boc-item:hover{background-color:#094771;color:#fff}.boc-item.selected img,.boc-item:hover img{filter:invert(100%)}.boc-item.selected img{visibility:visible!important}.boc-form-fieldset{display:flex;flex-wrap:wrap;margin:0!important}.boc-form-field{flex:1 0 21%;margin:3px;min-width:200px}.boc-form-field-100{flex:1 0 96%;margin:3px;min-width:200px}.boc-input{position:relative}.boc-input>input,.boc-input>select{height:50px;padding:18px 10px 2px 9px;width:100%;box-sizing:border-box;border-style:solid;border-width:1px}.boc-input select{height:50px;padding:20px 5px 4px 5px}[data-boc-input-disabled].boc-input>input,[data-boc-input-disabled].boc-input>select{border-color:transparent!important}.boc-light [data-boc-input-disabled]>input,.boc-light [data-boc-input-disabled]>select{background-color:#fff!important}.boc-dark [data-boc-input-disabled]>input,.boc-dark [data-boc-input-disabled]>select{background-color:#252526!important}[data-boc-input-disabled]>select{appearance:none;padding-left:8px}.boc-input>label{display:inline-block;position:absolute;padding-left:10px;padding-right:10px;color:#acacac;cursor:text;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1 ease-out;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:initial;text-align:initial;white-space:nowrap}.boc-input>label{top:12px;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 14px)}.boc-input>label.focused,.boc-input>label.hasval{top:-1px}.boc-input>input,.boc-input>select{outline:0;border-radius:5px}.boc-dark .boc-input>label.focused,.boc-light .boc-input>label.focused{color:#039be5}.boc-dark .boc-input>input,.boc-dark .boc-input>select{color:#ccc;background-color:#333;border-color:#5b5b5b}.boc-light .boc-input>input,.boc-light .boc-input>select{color:#757575;background-color:#fff;border-color:#c7c7c7}.boc-light .boc-input>input:focus,.boc-light .boc-input>select:focus{border-color:#039be5;background-color:#f8f9f9}.boc-dark .boc-input>input:focus,.boc-dark .boc-input>select:focus{border-color:#039be5;background-color:#3c3c3c}.boc-dark .boc-input>input.boc-validation-error,.boc-dark .boc-input>select.boc-validation-error,.boc-light .boc-input>input.boc-validation-error,.boc-light .boc-input>select.boc-validation-error{border-color:#ca2a2a}.boc-dark .boc-validation-error-message,.boc-light .boc-validation-error-message{color:#ca2a2a}.boc-link{color:#039be5;cursor:pointer;text-decoration:underline}.boc-link:hover{color:#f57c00}.boc-dark ::-webkit-scrollbar,.boc-light ::-webkit-scrollbar{width:15px;height:15px}.boc-dark ::-webkit-scrollbar-corner{background:#1e1e1e}.boc-dark ::-webkit-scrollbar-track{background:#1e1e1e;border-left:1px solid #333;border-top:1px solid #333}.boc-dark ::-webkit-scrollbar-thumb{background:#424242}.boc-dark ::-webkit-scrollbar-thumb:hover{background:#4f4f4f}.boc-dark ::-webkit-scrollbar-thumb:active{background:#5e5e5e}.boc-light ::-webkit-scrollbar-corner{background:#fff}.boc-light ::-webkit-scrollbar-track{background:#fff;border-left:1px solid #ddd;border-top:1px solid #ddd}.boc-light ::-webkit-scrollbar-thumb{background:#c1c1c1}.boc-light ::-webkit-scrollbar-thumb:hover{background:#929292}.boc-light ::-webkit-scrollbar-thumb:active{background:#666}.boc-edit-form{position:fixed;top:0;right:0;height:100%;width:100%;box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0;display:flex;flex-direction:column;height:100%;width:400px}@media screen and (max-width:1000px){.boc-edit-form{width:100%}}.boc-dark .boc-edit-form{background-color:#252526}.boc-light .boc-edit-form{background-color:#fff}.boc-edit-form-header{height:105px;text-align:center;border-radius:10px}.export-service .boc-edit-form-header{border-radius:unset}.boc-edit-form-title{color:#fff;margin:0;padding:14px 17px 7px 17px}.boc-edit-form-avatar{border-radius:50%;width:150px;height:150px;position:absolute;top:75px;border:5px solid #fff;left:50%;transform:translateX(-50%);background-color:#cacaca;box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0}.boc-edit-form-close{position:absolute;right:14px;top:14px;width:34px;height:34px;cursor:pointer}.boc-edit-form-fields{flex-grow:1;overflow-y:auto;overflow-x:hidden}.boc-edit-form-fields-inner{margin:0 7px 20px 7px}.boc-chart-menu{opacity:0;display:inline-block;position:absolute;text-align:left;user-select:none;min-width:270px;box-shadow:rgba(0,0,0,.2) 0 4px 8px 0,rgba(0,0,0,.19) 0 6px 20px 0;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif;border-radius:10px}.boc-chart-menu>div:hover img{filter:invert(100%)}.boc-chart-menu [data-item]{text-align:start;padding:7px 10px}.boc-dark .boc-chart-menu [data-item]{background-color:#252526;color:#acacac;border-bottom:1px solid #333}.boc-dark .boc-chart-menu [data-item]:hover{background-color:#094771!important;color:#fff!important}.boc-dark .boc-chart-menu [data-item]:hover svg{filter:brightness(0) invert(1)}.boc-light .boc-chart-menu [data-item]{background-color:#fff;color:#333;border-bottom:1px solid #c7c7c7}.boc-light .boc-chart-menu [data-item]:hover{background-color:#0074e8!important;color:#fff!important}.boc-light .boc-chart-menu [data-item]:hover svg{filter:brightness(0) invert(1)}.boc-chart-menu [data-item] svg{vertical-align:middle}.boc-chart-menu [data-item]:first-child{border-top-left-radius:7px;border-top-right-radius:7px}.boc-chart-menu [data-item]:last-child{border-bottom-width:0;border-bottom-style:none;border-bottom-left-radius:7px;border-bottom-right-radius:7px}.boc-search{position:absolute}@media screen and (max-width:500px){.boc-search{width:calc(100% - 30px);left:15px}}.boc-search .boc-input{margin-bottom:0}.boc-search-input{color:#7a7a7a;width:100%;border:none;outline:0;padding-top:10px;padding-right:47px}.boc-search-image-td{width:43px}.boc-search-text-td{padding-inline-end:7px;line-height:15px;text-align:start}.boc-search table{box-shadow:rgba(0,0,0,.2) 0 4px 8px 0,rgba(0,0,0,.19) 0 6px 20px 0;margin:0 3.5px 0 3.5px;width:calc(100% - 7px);border-radius:7px}.boc-search table tr:first-child td:first-child{border-top-left-radius:7px}.boc-search table tr:first-child td:last-child{border-top-right-radius:7px}[dir=rtl] .boc-search table tr:first-child td:first-child{border-top-left-radius:unset;border-top-right-radius:7px}[dir=rtl] .boc-search table tr:first-child td:last-child{border-top-right-radius:unset;border-top-left-radius:7px}.boc-search table tr:last-child td:first-child{border-bottom-left-radius:7px}.boc-search table tr:last-child td:last-child{border-bottom-right-radius:7px}[dir=rtl] .boc-search table tr:last-child td:first-child{border-bottom-left-radius:unset;border-bottom-right-radius:7px}[dir=rtl] .boc-search table tr:last-child td:last-child{border-bottom-right-radius:unset;border-bottom-left-radius:7px}.boc-dark .boc-search table{background-color:#252526;color:#acacac}.boc-search [data-search-item-id]{cursor:pointer}.boc-search-photo{margin:7px 7px 0 7px;width:32px;height:32px;background-size:cover;background-position:top center;border-radius:50%;display:inline-block;border:1px solid #8c8c8c}.boc-dark .boc-search [data-search-item-id] td{border-top:1px solid #333}.boc-dark .boc-search [data-search-item-id]:hover,.boc-dark .boc-search [data-selected=yes]{background-color:#094771;color:#fff}.boc-light .boc-search table{background-color:#fff;color:#333}.boc-light .boc-search [data-search-item-id] td{border-top:1px solid #c7c7c7}.boc-light .boc-search [data-search-item-id]:hover,.boc-light .boc-search [data-selected=yes]{background-color:#0074e8;color:#fff}.boc-search [data-search-item-id]:first-child td{border-top:unset}.boc-ripple-container{position:absolute;top:0;right:0;bottom:0;left:0}.boc-drag-over rect{opacity:.5}.boc-ripple-container span{transform:scale(0);border-radius:100%;position:absolute;opacity:.75;background-color:#fff;animation:boc-ripple 1s}@-moz-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@-webkit-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@-o-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@keyframes boc-ripple{to{opacity:0;transform:scale(2)}}.boc-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;-webkit-transition:.4s;transition:.4s}.boc-slider:before{position:absolute;content:"";height:16px;width:16px;left:4px;bottom:4px;background-color:#fff;-webkit-transition:.4s;transition:.4s}.boc-slider.round{border-radius:24px}.boc-slider.round:before{border-radius:50%}svg text:hover{cursor:default}svg.boc-cursor-grab,svg.boc-cursor-grab text:hover{cursor:grab}svg.boc-cursor-nodrop,svg.boc-cursor-nodrop text:hover{cursor:no-drop}svg.boc-cursor-copy,svg.boc-cursor-copy text:hover{cursor:copy}svg.boc-cursor-move,svg.boc-cursor-move text:hover{cursor:move}#boc-close-btn:focus,#boc-close-btn:hover{color:#000;text-decoration:none;cursor:pointer}#boc-id-select:focus{outline:.5px solid #aeaeae}#boc-sampleDialog #title:hover{cursor:default;background:gray}.boc-light{background-color:#fff;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif}.boc-dark{background-color:#1e1e1e;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif}.boc-light .boc-fill{fill:#fff}.boc-dark .boc-fill{fill:#1e1e1e}.boc-dark input,.boc-dark select,.boc-light input,.boc-light select{font:16px Helvetica,"Segoe UI",Arial,sans-serif}.boc-dark h1,.boc-light h1{font-size:30px;line-height:1}.boc-edit-form{position:absolute;border-radius:10px}.export-service .boc-edit-form{border-radius:unset}.boc-dark .boc-edit-form{color:#acacac}.boc-light .boc-edit-form{color:#333}.boc-dark ::-webkit-calendar-picker-indicator{filter:invert(70%)}.boc-light ::-webkit-calendar-picker-indicator{filter:invert(50%)}.boc-edit-form-instruments{margin:42px 10px 0 10px;text-align:center;min-height:70px}.boc-img-button svg{position:relative;top:12px}.boc-light .boc-toolbar-container svg circle,.boc-light .boc-toolbar-container svg line,.boc-light .boc-toolbar-container svg path{stroke:#8c8c8c!important}.boc-dark .boc-toolbar-container svg circle,.boc-dark .boc-toolbar-container svg line,.boc-dark .boc-toolbar-container svg path{stroke:#8c8c8c!important}.boc-dark .boc-toolbar-container svg rect{fill:#252526!important}.boc-dark .boc-toolbar-container [data-tlbr=minus] svg{border-left:1px solid #5b5b5b!important;border-right:1px solid #5b5b5b!important;border-bottom:1px solid #5b5b5b!important}.boc-dark .boc-toolbar-container [data-tlbr=plus] svg{border-left:1px solid #5b5b5b!important;border-right:1px solid #5b5b5b!important;border-top:1px solid #5b5b5b!important}.boc-dark .boc-toolbar-container [data-tlbr]>svg{border:1px solid #5b5b5b!important;background-color:#252526!important}.boc-toolbar-layout{height:123px;padding-top:20px;position:absolute;width:100%;left:"0";bottom:"-145px"}.boc-light .boc-toolbar-layout{border-top:1px solid #c7c7c7;background-color:#f9f9f9}.boc-dark .boc-toolbar-layout{border-top:1px solid #5b5b5b;background-color:#2b2b2b}.boc-dotted-connector path{stroke-dasharray:7}</style>';
+    return '<style data-boc-styles>.boc-button{background-color:#039be5;cursor:pointer;width:calc(100%);height:50px;color:#fff;padding-top:5px;padding-left:7px;padding-right:7px;text-align:center;text-transform:uppercase;border:1px solid #3fc0ff;display:inline-block;border-radius:5px}.boc-button.orange{background-color:#f57c00;border:1px solid #ffa03e}.boc-button.yellow{background-color:#ffca28;border:1px solid #ffdf7c}.boc-button.lower{text-transform:unset}.boc-button.transparent{background-color:transparent}.boc-button:hover{background-color:#35afea}.boc-button.orange:hover{background-color:#f79632}.boc-button.yellow:hover{background-color:#ffd452}.boc-button:active{transform:matrix(.98,0,0,.98,0,0)}.boc-button-icon{text-align:initial;cursor:pointer;margin-bottom:15px;color:#039be5}.boc-dark .boc-button-icon:hover{background-color:#2d2d2d}.boc-light .boc-button-icon:hover{background-color:#ececec}.boc-button-icon>img{height:24px;width:24px;vertical-align:middle;padding:7px}.boc-button:focus{outline:0}.boc-button-icon>img{filter:invert(46%) sepia(66%) saturate(2530%) hue-rotate(171deg) brightness(95%) contrast(98%)}.boc-light .boc-button.transparent{color:#039be5}.boc-light .boc-button.transparent:hover{color:#fff}.boc-button-loading{background-color:transparent;cursor:pointer;width:calc(100% - 2px);height:50px;color:#fff;text-align:center;text-transform:uppercase;border:1px solid #027cb7;display:inline-block;display:flex;justify-content:center;align-items:center;display:none}.boc-button-loading .boc-loading-dots div{margin:0 10px}.boc-link-boc-button{position:absolute;right:10px;top:-1px}@media screen and (max-width:1000px){.boc-link-boc-button{right:50px}}[data-boc-input-disabled] .boc-link-boc-button{display:none}[dir=rtl] .boc-link-boc-button{left:10px;right:unset}.boc-img-button{width:48px;height:48px;cursor:pointer;border-radius:50%;background-color:#039be5;background-repeat:no-repeat;background-size:24px 24px;background-position:center center;margin:3px;display:inline-block}.boc-img-button:hover{background-color:#f57c00}.boc-checkbox{display:block;position:relative;padding-left:35px;margin-bottom:12px;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;white-space:nowrap}.boc-checkbox input{position:absolute;opacity:0;cursor:pointer;height:0;width:0}.boc-checkbox-checkmark{position:absolute;top:0;left:0;height:25px;width:25px;border-radius:5px}.boc-dark [data-boc-input-disabled] .boc-checkbox-checkmark,.boc-dark [data-boc-input-disabled].boc-checkbox input:checked~.boc-checkbox-checkmark,.boc-light [data-boc-input-disabled] .boc-checkbox-checkmark,.boc-light [data-boc-input-disabled].boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#aeaeae!important}[data-boc-input-disabled].boc-checkbox{cursor:default}[dir=rtl] .boc-checkbox-checkmark{right:0}[dir=rtl] .boc-checkbox{padding-left:unset;padding-right:35px}.boc-dark .boc-checkbox-checkmark{background-color:#333;border:1px solid #5b5b5b}.boc-light .boc-checkbox-checkmark{background-color:#fff;border:1px solid #c7c7c7}.boc-dark .boc-checkbox:hover input~.boc-checkbox-checkmark{background-color:#3c3c3c}.boc-light .boc-checkbox:hover input~.boc-checkbox-checkmark{background-color:#f8f9f9}.boc-dark .boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#039be5}.boc-light .boc-checkbox input:checked~.boc-checkbox-checkmark{background-color:#039be5}.boc-checkbox-checkmark:after{content:"";position:absolute;display:none}.boc-checkbox input:checked~.boc-checkbox-checkmark:after{display:block}.boc-checkbox .boc-checkbox-checkmark:after{left:9px;top:5px;width:5px;height:10px;border:solid #fff;border-width:0 3px 3px 0;-webkit-transform:rotate(45deg);-ms-transform:rotate(45deg);transform:rotate(45deg)}.boc-filter{user-select:none}.boc-light .boc-filter{color:#757575}.boc-dark .boc-filter{color:#ccc}.boc-filter>div>div{display:inline-block;padding:3px 10px;cursor:pointer}.boc-filter-menu fieldset,.boc-filter>div,.filter-field-selected{border-radius:5px}.boc-filter-menu fieldset{overflow-y:auto;max-height:300px}.boc-filter>div.boc-filter-menu{padding:10px}.boc-light .boc-filter>div.boc-filter-menu,.boc-light .filter-field-selected{background-color:#f8f9f9}.boc-dark .boc-filter>div.boc-filter-menu,.boc-dark .filter-field-selected{background-color:#3c3c3c}.boc-light .boc-filter>div{background-color:#eee}.boc-dark .boc-filter>div{background-color:#333}.boc-form-perspective{transform-style:preserve-3d;perspective:500px;position:absolute;top:32px}.boc-form{box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0;padding:14px;transform-origin:top center;user-select:none;display:none;position:relative;max-height:calc(100vh - 100px);overflow-y:auto;border-bottom-left-radius:5px;border-bottom-right-radius:5px}.boc-form-bottom{border-bottom-left-radius:unset;border-bottom-right-radius:unset;border-top-left-radius:5px;border-top-right-radius:5px}.boc-form .separator{margin:0 10px}@media screen and (max-width:1000px){.boc-form-perspective{min-width:100%;max-height:calc(100% - 32px);left:unset!important;right:unset!important;transform:none!important}.boc-form .set{max-height:calc(100vh - 74px)}.boc-form-fieldset{max-width:unset!important}}.boc-light .boc-form .separator{border-bottom:1px solid #c7c7c7}.boc-dark .boc-form .separator{border-bottom:1px solid #5b5b5b}.boc-light .boc-form{background-color:#fff}.boc-dark .boc-form{background-color:#252526}.boc-item{padding:6px 12px 6px 12px;display:flex;flex-direction:row}.boc-light .boc-form .boc-item.selected,.boc-light .boc-form .boc-item:hover{background-color:#0074e8;color:#fff}.boc-dark .boc-form .boc-item.selected,.boc-dark .boc-form .boc-item:hover{background-color:#094771;color:#fff}.boc-item.selected img,.boc-item:hover img{filter:invert(100%)}.boc-item.selected img{visibility:visible!important}.boc-form-fieldset{display:flex;flex-wrap:wrap;margin:0!important}.boc-form-field{flex:1 0 21%;margin:3px;min-width:200px}.boc-form-field-100{flex:1 0 96%;margin:3px;min-width:200px}.boc-input{position:relative}.boc-input>input,.boc-input>select{height:50px;padding:18px 10px 2px 9px;width:100%;box-sizing:border-box;border-style:solid;border-width:1px}.boc-input select{height:50px;padding:20px 5px 4px 5px}[data-boc-input-disabled].boc-input>input,[data-boc-input-disabled].boc-input>select{border-color:transparent!important}.boc-light [data-boc-input-disabled]>input,.boc-light [data-boc-input-disabled]>select{background-color:#fff!important}.boc-dark [data-boc-input-disabled]>input,.boc-dark [data-boc-input-disabled]>select{background-color:#252526!important}[data-boc-input-disabled]>select{appearance:none;padding-left:8px}.boc-input>label{display:inline-block;position:absolute;padding-left:10px;padding-right:10px;color:#acacac;cursor:text;-webkit-transition:all .1s ease-out;-moz-transition:all .1s ease-out;-ms-transition:all .1s ease-out;-o-transition:all .1s ease-out;transition:all .1 ease-out;-webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:initial;text-align:initial;white-space:nowrap}.boc-input>label{top:12px;overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 14px)}.boc-input>label.focused,.boc-input>label.hasval{top:-1px}.boc-input>input,.boc-input>select{outline:0;border-radius:5px}.boc-dark .boc-input>label.focused,.boc-light .boc-input>label.focused{color:#039be5}.boc-dark .boc-input>input,.boc-dark .boc-input>select{color:#ccc;background-color:#333;border-color:#5b5b5b}.boc-light .boc-input>input,.boc-light .boc-input>select{color:#757575;background-color:#fff;border-color:#c7c7c7}.boc-light .boc-input>input:focus,.boc-light .boc-input>select:focus{border-color:#039be5;background-color:#f8f9f9}.boc-dark .boc-input>input:focus,.boc-dark .boc-input>select:focus{border-color:#039be5;background-color:#3c3c3c}.boc-dark .boc-input>input.boc-validation-error,.boc-dark .boc-input>select.boc-validation-error,.boc-light .boc-input>input.boc-validation-error,.boc-light .boc-input>select.boc-validation-error{border-color:#ca2a2a}.boc-dark .boc-validation-error-message,.boc-light .boc-validation-error-message{color:#ca2a2a}.boc-link{color:#039be5;cursor:pointer;text-decoration:underline}.boc-link:hover{color:#f57c00}.boc-dark ::-webkit-scrollbar,.boc-light ::-webkit-scrollbar{width:15px;height:15px}.boc-dark ::-webkit-scrollbar-corner{background:#1e1e1e}.boc-dark ::-webkit-scrollbar-track{background:#1e1e1e;border-left:1px solid #333;border-top:1px solid #333}.boc-dark ::-webkit-scrollbar-thumb{background:#424242}.boc-dark ::-webkit-scrollbar-thumb:hover{background:#4f4f4f}.boc-dark ::-webkit-scrollbar-thumb:active{background:#5e5e5e}.boc-light ::-webkit-scrollbar-corner{background:#fff}.boc-light ::-webkit-scrollbar-track{background:#fff;border-left:1px solid #ddd;border-top:1px solid #ddd}.boc-light ::-webkit-scrollbar-thumb{background:#c1c1c1}.boc-light ::-webkit-scrollbar-thumb:hover{background:#929292}.boc-light ::-webkit-scrollbar-thumb:active{background:#666}.boc-edit-form{position:fixed;top:0;right:0;height:100%;width:100%;box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0;display:flex;flex-direction:column;height:100%;width:400px}@media screen and (max-width:1000px){.boc-edit-form{width:100%}}.boc-dark .boc-edit-form{background-color:#252526}.boc-light .boc-edit-form{background-color:#fff}.boc-edit-form-header{height:200px;text-align:center;border-radius:10px}.export-service .boc-edit-form-header{border-radius:unset}.boc-edit-form-title{color:#fff;margin:0;padding:14px 17px 7px 17px}.boc-edit-form-avatar{border-radius:50%;width:150px;height:150px;position:absolute;top:75px;border:5px solid #fff;left:50%;transform:translateX(-50%);background-color:#cacaca;box-shadow:rgba(0,0,0,.2) 0 6px 6px 0,rgba(0,0,0,.19) 0 13px 20px 0}.boc-edit-form-close{position:absolute;right:14px;top:14px;width:34px;height:34px;cursor:pointer}.boc-edit-form-fields{flex-grow:1;overflow-y:auto;overflow-x:hidden}.boc-edit-form-fields-inner{margin:0 7px 20px 7px}.boc-chart-menu{opacity:0;display:inline-block;position:absolute;text-align:left;user-select:none;min-width:270px;box-shadow:rgba(0,0,0,.2) 0 4px 8px 0,rgba(0,0,0,.19) 0 6px 20px 0;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif;border-radius:10px}.boc-chart-menu>div:hover img{filter:invert(100%)}.boc-chart-menu [data-item]{text-align:start;padding:7px 10px}.boc-dark .boc-chart-menu [data-item]{background-color:#252526;color:#acacac;border-bottom:1px solid #333}.boc-dark .boc-chart-menu [data-item]:hover{background-color:#094771!important;color:#fff!important}.boc-dark .boc-chart-menu [data-item]:hover svg{filter:brightness(0) invert(1)}.boc-light .boc-chart-menu [data-item]{background-color:#fff;color:#333;border-bottom:1px solid #c7c7c7}.boc-light .boc-chart-menu [data-item]:hover{background-color:#0074e8!important;color:#fff!important}.boc-light .boc-chart-menu [data-item]:hover svg{filter:brightness(0) invert(1)}.boc-chart-menu [data-item] svg{vertical-align:middle}.boc-chart-menu [data-item]:first-child{border-top-left-radius:7px;border-top-right-radius:7px}.boc-chart-menu [data-item]:last-child{border-bottom-width:0;border-bottom-style:none;border-bottom-left-radius:7px;border-bottom-right-radius:7px}.boc-search{position:absolute}@media screen and (max-width:500px){.boc-search{width:calc(100% - 30px);left:15px}}.boc-search .boc-input{margin-bottom:0}.boc-search-input{color:#7a7a7a;width:100%;border:none;outline:0;padding-top:10px;padding-right:47px}.boc-search-image-td{width:43px}.boc-search-text-td{padding-inline-end:7px;line-height:15px;text-align:start}.boc-search table{box-shadow:rgba(0,0,0,.2) 0 4px 8px 0,rgba(0,0,0,.19) 0 6px 20px 0;margin:0 3.5px 0 3.5px;width:calc(100% - 7px);border-radius:7px}.boc-search table tr:first-child td:first-child{border-top-left-radius:7px}.boc-search table tr:first-child td:last-child{border-top-right-radius:7px}[dir=rtl] .boc-search table tr:first-child td:first-child{border-top-left-radius:unset;border-top-right-radius:7px}[dir=rtl] .boc-search table tr:first-child td:last-child{border-top-right-radius:unset;border-top-left-radius:7px}.boc-search table tr:last-child td:first-child{border-bottom-left-radius:7px}.boc-search table tr:last-child td:last-child{border-bottom-right-radius:7px}[dir=rtl] .boc-search table tr:last-child td:first-child{border-bottom-left-radius:unset;border-bottom-right-radius:7px}[dir=rtl] .boc-search table tr:last-child td:last-child{border-bottom-right-radius:unset;border-bottom-left-radius:7px}.boc-dark .boc-search table{background-color:#252526;color:#acacac}.boc-search [data-search-item-id]{cursor:pointer}.boc-search-photo{margin:7px 7px 0 7px;width:32px;height:32px;background-size:cover;background-position:top center;border-radius:50%;display:inline-block;border:1px solid #8c8c8c}.boc-dark .boc-search [data-search-item-id] td{border-top:1px solid #333}.boc-dark .boc-search [data-search-item-id]:hover,.boc-dark .boc-search [data-selected=yes]{background-color:#094771;color:#fff}.boc-light .boc-search table{background-color:#fff;color:#333}.boc-light .boc-search [data-search-item-id] td{border-top:1px solid #c7c7c7}.boc-light .boc-search [data-search-item-id]:hover,.boc-light .boc-search [data-selected=yes]{background-color:#0074e8;color:#fff}.boc-search [data-search-item-id]:first-child td{border-top:unset}.boc-ripple-container{position:absolute;top:0;right:0;bottom:0;left:0}.boc-drag-over rect{opacity:.5}.boc-ripple-container span{transform:scale(0);border-radius:100%;position:absolute;opacity:.75;background-color:#fff;animation:boc-ripple 1s}@-moz-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@-webkit-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@-o-keyframes boc-ripple{to{opacity:0;transform:scale(2)}}@keyframes boc-ripple{to{opacity:0;transform:scale(2)}}.boc-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;-webkit-transition:.4s;transition:.4s}.boc-slider:before{position:absolute;content:"";height:16px;width:16px;left:4px;bottom:4px;background-color:#fff;-webkit-transition:.4s;transition:.4s}.boc-slider.round{border-radius:24px}.boc-slider.round:before{border-radius:50%}svg text:hover{cursor:default}svg.boc-cursor-grab,svg.boc-cursor-grab text:hover{cursor:grab}svg.boc-cursor-nodrop,svg.boc-cursor-nodrop text:hover{cursor:no-drop}svg.boc-cursor-copy,svg.boc-cursor-copy text:hover{cursor:copy}svg.boc-cursor-move,svg.boc-cursor-move text:hover{cursor:move}#boc-close-btn:focus,#boc-close-btn:hover{color:#000;text-decoration:none;cursor:pointer}#boc-id-select:focus{outline:.5px solid #aeaeae}#boc-sampleDialog #title:hover{cursor:default;background:gray}.boc-light{background-color:#fff;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif}.boc-dark{background-color:#1e1e1e;font:13px/28px Helvetica,"Segoe UI",Arial,sans-serif}.boc-light .boc-fill{fill:#fff}.boc-dark .boc-fill{fill:#1e1e1e}.boc-dark input,.boc-dark select,.boc-light input,.boc-light select{font:16px Helvetica,"Segoe UI",Arial,sans-serif}.boc-dark h1,.boc-light h1{font-size:30px;line-height:1}.boc-edit-form{position:absolute;border-radius:10px}.export-service .boc-edit-form{border-radius:unset}.boc-dark .boc-edit-form{color:#acacac}.boc-light .boc-edit-form{color:#333}.boc-dark ::-webkit-calendar-picker-indicator{filter:invert(70%)}.boc-light ::-webkit-calendar-picker-indicator{filter:invert(50%)}.boc-edit-form-instruments{margin:42px 10px 0 10px;text-align:center;min-height:70px}.boc-img-button svg{position:relative;top:12px}.boc-light .boc-toolbar-container svg circle,.boc-light .boc-toolbar-container svg line,.boc-light .boc-toolbar-container svg path{stroke:#8c8c8c!important}.boc-dark .boc-toolbar-container svg circle,.boc-dark .boc-toolbar-container svg line,.boc-dark .boc-toolbar-container svg path{stroke:#8c8c8c!important}.boc-dark .boc-toolbar-container svg rect{fill:#252526!important}.boc-dark .boc-toolbar-container [data-tlbr=minus] svg{border-left:1px solid #5b5b5b!important;border-right:1px solid #5b5b5b!important;border-bottom:1px solid #5b5b5b!important}.boc-dark .boc-toolbar-container [data-tlbr=plus] svg{border-left:1px solid #5b5b5b!important;border-right:1px solid #5b5b5b!important;border-top:1px solid #5b5b5b!important}.boc-dark .boc-toolbar-container [data-tlbr]>svg{border:1px solid #5b5b5b!important;background-color:#252526!important}.boc-toolbar-layout{height:123px;padding-top:20px;position:absolute;width:100%;left:"0";bottom:"-145px"}.boc-light .boc-toolbar-layout{border-top:1px solid #c7c7c7;background-color:#f9f9f9}.boc-dark .boc-toolbar-layout{border-top:1px solid #5b5b5b;background-color:#2b2b2b}.boc-dotted-connector path{stroke-dasharray:7}</style>';
   }),
   void 0 === OrgChart && (OrgChart = {}),
   (OrgChart.prototype.onField = function (t) {
@@ -11032,6 +11018,7 @@ var OrgChart = function (t, e) {
       null != t.layout && 0 != t.layout && (r.l = t.layout),
       t.isAssistant && (r.a = 1),
       t.isSplit && (r.s = t.isSplit),
+      t.isMirror && (r.im = t.isMirror),
       t.padding && (r.q = t.padding),
       t.lcn && (r.k = t.lcn),
       t.stContainerNodes &&
@@ -11075,7 +11062,7 @@ var OrgChart = function (t, e) {
       l++
     )
       n.push(t[l].id), OrgChart.remote._toReqDTO(t[l], a);
-    var s = { n: a, c: o, r: n, v: "8.10.09" };
+    var s = { n: a, c: o, r: n, v: "8.11.08" };
     if (
       (OrgChart.LIMIT_NODES || (s.l = !0), null != OrgChart.remote._fromReqDTO)
     )

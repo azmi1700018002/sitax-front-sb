@@ -78,7 +78,7 @@ if (isset($data2["data"])) {
 
                 foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
                     // Check if MenuID, GroupID, and IsDeleted condition matches
-                    if ($menuIDfk["MenuID"] === $menuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                    if ($menuIDfk["MenuID"] === $activeMenuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
                         if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
                             $showButtons = true;
                         }

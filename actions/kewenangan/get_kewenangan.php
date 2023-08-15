@@ -108,14 +108,45 @@ if (isset($data3["data"])) {
                     ($kewenangan["IsDeleted"] == 1 ? "<span class='badge badge-primary'>" . "Aktif" . "</span>" : "<span class='badge badge-danger'>" . "Tidak Aktif" . "</span>") .
                     "</td>";
 
-                echo '<td>
-            <div class="d-flex justify-content-center">
-            <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteKewenangan' .
-                    $kewenangan["GroupID"] .
-                    "-" .
-                    $kewenangan["MenuID"] .
-                    '"><i class="fas fa-trash"></i> </button>
-          <div class="modal fade" id="deleteKewenangan' .
+                // Loop through each menu item in the data
+                foreach ($data["data"] as $menuItem) {
+                    $showButtons = false; // Flag to determine whether to show buttons or not
+
+                    foreach ($menuItem["MenuIDfk"] as $menuIDfk) {
+                        // Check if MenuID, GroupID, and IsDeleted condition matches
+                        if ($menuIDfk["MenuID"] === $activeMenuID && $menuIDfk["GroupID"] === $groupIDToCheck) {
+                            if ($menuIDfk["IsDeleted"] === "1" || $menuIDfk["IsUpdated"] === "1") {
+                                $showButtons = true;
+                            }
+                            break; // No need to continue checking other MenuIDfk entries for this menu item
+                        }
+                    }
+
+                    if ($showButtons) {
+                        echo '<td>
+<div class="d-flex justify-content-center">';
+
+                        if ($menuIDfk["IsDeleted"] === "1") {
+                            echo ' <button type="submit" class="btn btn-danger btn-circle btn-sm mr-2" data-ripple-color="dark" data-toggle="modal" data-target="#deleteKewenangan' .
+                                $kewenangan["GroupID"] .
+                                "-" .
+                                $kewenangan["MenuID"] .
+                                '"><i class="fas fa-trash"></i> </button>';
+                        }
+
+                        if ($menuIDfk["IsUpdated"] === "1") {
+                            echo ' <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editKewenangan' .
+                                $kewenangan["GroupID"] .
+                                "-" .
+                                $kewenangan["MenuID"] .
+                                '">  <i class="fas fa-edit"></i> </button>';
+                        }
+
+                        echo '</div></td>';
+                    }
+                }
+
+                echo '<div class="modal fade" id="deleteKewenangan' .
                     $kewenangan["GroupID"] .
                     "-" .
                     $kewenangan["MenuID"] .
@@ -145,11 +176,6 @@ if (isset($data3["data"])) {
     </div>
     </div>  
     
-                <button type="submit" class="btn btn-warning btn-circle btn-sm" data-ripple-color="dark" data-toggle="modal" data-target="#editKewenangan' .
-                    $kewenangan["GroupID"] .
-                    "-" .
-                    $kewenangan["MenuID"] .
-                    '">  <i class="fas fa-edit"></i> </button>
                 <div class="modal fade" id="editKewenangan' .
                     $kewenangan["GroupID"] .
                     "-" .
@@ -244,8 +270,7 @@ if (isset($data3["data"])) {
                         </form>
                     </div>
                 </div>
-            </div>
-        </td>';
+            </div>';
                 echo "</tr>";
                 $nomor++;
             }
