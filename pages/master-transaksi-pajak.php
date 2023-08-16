@@ -17,9 +17,28 @@ include '../includes/header.php';
                 </nav>
                 <div style="width: 100%; height: 500px" id="tree"></div>
                 <script>
-                    fetch('http://localhost:3000/pubpajak')
-                        .then(response => response.json())
-                        .then(data => processAndDisplayData(data))
+                    // Di bagian fetch API yang sudah ada
+                    const token = "<?php echo $_SESSION['token']; ?>"; // Mengambil token dari session PHP
+                    let fileOptions = []; // Definisikan variabel fileOptions di luar fungsi
+
+                    // Menggunakan Promise.all untuk menunggu kedua permintaan fetch selesai
+                    Promise.all([
+                        fetch('http://localhost:3000/pubpajak').then(response => response.json()),
+                        fetch('http://localhost:3000/auth/file', {
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}`
+                            }
+                        }).then(response => response.json())
+                    ])
+                        .then(([pubpajakData, fileData]) => {
+                            fileOptions = fileData.data.map(file => ({
+                                value: file.id,
+                                text: file.FileJudul
+                            }));
+
+                            processAndDisplayData(pubpajakData);
+                        })
                         .catch(error => console.error('Error fetching data:', error));
 
                     function processAndDisplayData(apiData) {
@@ -35,19 +54,22 @@ include '../includes/header.php';
                                 StsPajak,
                                 KetPajak,
                                 StsParent,
-                                PajakIDfk
+                                FileID,
+                                // PajakIDfk
                             } = entry;
                             nodes[PajakID] = {
                                 id: PajakID,
-                                title: NamaHeader,
-                                name: NamaPajak,
+                                NamaHeader: NamaHeader,
+                                NamaPajak: NamaPajak,
                                 pid: ParentPajak,
-                                ketPajak: KetPajak,
-                                ppn: PajakIDfk.length > 0 ? PajakIDfk[0].Ppn : '-',
-                                pasal23: PajakIDfk.length > 0 ? PajakIDfk[0].Pasal23 : '-',
-                                pphfinal: PajakIDfk.length > 0 ? PajakIDfk[0].PphFinal : '-',
-                                pajaklain: PajakIDfk.length > 0 ? PajakIDfk[0].PajakLain : '-',
-                                keterangan: PajakIDfk.length > 0 ? PajakIDfk[0].Keterangan : '-'
+                                KetPajak: KetPajak,
+                                StsPajak: StsPajak,
+                                FileID: FileID,
+                                // ppn: PajakIDfk.length > 0 ? PajakIDfk[0].Ppn : '-',
+                                // pasal23: PajakIDfk.length > 0 ? PajakIDfk[0].Pasal23 : '-',
+                                // pphfinal: PajakIDfk.length > 0 ? PajakIDfk[0].PphFinal : '-',
+                                // pajaklain: PajakIDfk.length > 0 ? PajakIDfk[0].PajakLain : '-',
+                                // keterangan: PajakIDfk.length > 0 ? PajakIDfk[0].Keterangan : '-'
                             };
                             if (StsPajak === 1) {
                                 rootNode[PajakID] = nodes[PajakID];
@@ -82,43 +104,22 @@ include '../includes/header.php';
                             '<text data-width="130" style="font-size: 12px;" font-weight="bold" fill="#64696b" x="90" y="65" text-anchor="middle">{val}</text>';
 
                         const chart = new OrgChart(document.getElementById('tree'), {
-                            enableDragDrop: true,
+                            enableDragDrop: false,
                             template: "blueTemplate",
                             nodeBinding: {
-                                field_0: 'title',
-                                field_1: 'name',
+                                field_0: 'NamaHeader',
+                                field_1: 'NamaPajak',
                             },
                             collapse: {
                                 level: 1
                             },
                             editForm: {
                                 readOnly: false, // Allow editing
-                                titleBinding: "name",
+                                titleBinding: "NamaPajak",
                                 saveAndCloseBtn: "Save and close",
                                 cancelBtn: "Cancel",
-                                generateElementsFromFields: true,
+                                generateElementsFromFields: false,
                                 focusBinding: null,
-                                fields: [{
-                                    name: 'title',
-                                    type: 'textarea',
-                                    label: 'Title',
-                                },
-                                {
-                                    name: 'name',
-                                    type: 'textarea',
-                                    label: 'Name',
-                                },
-                                {
-                                    name: 'pid',
-                                    type: 'text',
-                                    label: 'Parent ID',
-                                },
-                                {
-                                    name: 'ketPajak',
-                                    type: 'textarea',
-                                    label: 'Ket Pajak',
-                                },
-                                ],
                                 buttons: {
                                     edit: {
                                         icon: OrgChart.icon.edit(24, 24, "#fff"),
@@ -126,12 +127,50 @@ include '../includes/header.php';
                                         hideIfEditMode: true,
                                         hideIfDetailsMode: false,
                                     },
-                                    pdf: {
-                                        icon: OrgChart.icon.pdf(24, 24, "#fff"),
-                                        text: "Save as PDF"
-                                    },
+                                    share: null,
+                                    pdf: null,
                                 },
-                                elements: [],
+                                elements: [{
+                                    type: 'textbox',
+                                    label: 'NamaHeader',
+                                    binding: 'NamaHeader',
+                                },
+                                {
+                                    type: 'textbox',
+                                    label: 'NamaPajak',
+                                    binding: 'NamaPajak',
+                                },
+                                {
+                                    type: 'textbox',
+                                    label: 'ParentPajak',
+                                    binding: 'pid',
+                                },
+                                {
+                                    type: 'textbox',
+                                    label: 'KetPajak',
+                                    binding: 'KetPajak',
+                                },
+                                {
+                                    type: 'textbox',
+                                    label: 'StsPajak',
+                                    binding: 'StsPajak',
+                                },
+                                // {
+                                //     type: 'select',
+                                //     label: 'FileID',
+                                //     binding: 'FileID',
+                                //     options: Object.values(nodes).map(node => ({
+                                //         value: node.id,
+                                //         text: node.FileID,
+                                //     }))
+                                // },
+                                {
+                                    type: 'select',
+                                    label: 'FileID',
+                                    binding: 'FileID',
+                                    options: fileOptions,
+                                }
+                                ],
                             },
 
                             tags: {
@@ -140,6 +179,40 @@ include '../includes/header.php';
                                 }
                             },
                             nodes: Object.values(rootNode),
+                        });
+
+                        // chart.on('init', function(sender) {
+                        //     sender.editUI.show(1, true);
+
+                        // });
+
+                        chart.editUI.on('save', function (sender, args) {
+                            const dataToSave = args.data; // Data yang akan disimpan
+                            const pajak_id = dataToSave.id; // Mengambil PajakID dari data yang akan disimpan
+                            dataToSave.StsPajak = parseInt(dataToSave.StsPajak); // Mengubah nilai menjadi integer
+                            dataToSave.ParentPajak = parseInt(dataToSave.pid); // Mengubah nilai menjadi integer
+
+                            // const token =
+                            //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJQcm9maWxlUGljdHVyZSI6ImRlZmF1bHRfcHJvZmlsZS5wbmciLCJVc2VybmFtZSI6IkFkbWluIiwiZXhwIjoxNjkyMTU0MTE1LCJpZCI6IkFkbWluIn0.U_4VBv6mOg2Pl5OkLqy9ZgyK3uJKFDMgqq055Re_GlY"; // Ganti dengan token Anda
+                            const token = "<?php echo $_SESSION['token']; ?>"; // Mengambil token dari session PHP
+
+                            fetch(`http://localhost:3000/auth/pajak/${pajak_id}`, {
+                                method: 'PUT', // Metode HTTP untuk menyimpan data
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${token}` // Menambahkan header Authorization dengan bearer token
+                                },
+                                body: JSON.stringify(dataToSave) // Mengubah data menjadi JSON string
+                            })
+                                .then(response => response.json())
+                                .then(savedData => {
+                                    console.log('Data saved:', savedData);
+                                    // Lakukan tindakan lain jika diperlukan setelah penyimpanan berhasil
+                                })
+                                .catch(error => {
+                                    console.error('Error saving data:', error);
+                                    // Lakukan tindakan lain jika penyimpanan gagal
+                                });
                         });
                     }
                 </script>
