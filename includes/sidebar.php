@@ -73,7 +73,6 @@ function isActive($link)
         }
         $childItemsByParent[$childItem['ParentID']][] = $childItem;
     }
-
     foreach ($parentItems as $parentItem) {
         if (isset($parentItem['MenuIDfk']) && is_array($parentItem['MenuIDfk'])) {
             $allowedGroupIDs = array_column($parentItem['MenuIDfk'], 'GroupID');
@@ -81,25 +80,36 @@ function isActive($link)
                 $parentMenuID = $parentItem['MenuID'];
                 $hasChildItems = isset($childItemsByParent[$parentMenuID]);
                 $isActiveParent = isActive($parentItem['MenuLink']);
+                $expandCollapse = false;
 
-                // Tambahkan kode berikut untuk menyimpan MenuID dalam session
                 if ($isActiveParent) {
                     $_SESSION['activeMenuID'] = $parentMenuID;
+                }
+
+                if (isset($childItemsByParent[$parentMenuID]) && is_array($childItemsByParent[$parentMenuID])) {
+                    foreach ($childItemsByParent[$parentMenuID] as $childItem) {
+                        if (isActive($childItem['MenuLink'])) {
+                            $expandCollapse = true;
+                            $_SESSION['activeMenuID'] = $childItem['MenuID'];
+                            break;
+                        }
+                    }
                 }
                 ?>
                 <li class="nav-item <?php echo $isActiveParent; ?>">
                     <a class="nav-link <?php echo $hasChildItems ? 'collapsed' : ''; ?>" <?php if ($hasChildItems): ?> href="#"
-                            data-toggle="collapse" data-target="#collapse<?php echo $parentMenuID; ?>" <?php else: ?>
-                            href="<?php echo $parentItem['MenuLink']; ?>" <?php endif; ?>
-                        aria-expanded="<?php echo $isActiveParent ? 'true' : 'false'; ?>"
-                        aria-controls="collapse<?php echo $parentMenuID; ?>">
+                            data-toggle="collapse" data-target="#collapse<?php echo $parentMenuID; ?>"
+                            aria-expanded="<?php echo ($isActiveParent || $expandCollapse) ? 'true' : 'false'; ?>"
+                            aria-controls="collapse<?php echo $parentMenuID; ?>" <?php else: ?>
+                            href="<?php echo $parentItem['MenuLink']; ?>" <?php endif; ?>>
                         <i class="<?php echo $parentItem['MenuIcon']; ?>"></i>
                         <span>
                             <?php echo $parentItem['MenuNama']; ?>
                         </span>
                     </a>
                     <?php if ($hasChildItems): ?>
-                        <div id="collapse<?php echo $parentMenuID; ?>" class="collapse <?php echo $isActiveParent ? 'show' : ''; ?>"
+                        <div id="collapse<?php echo $parentMenuID; ?>"
+                            class="collapse <?php echo ($isActiveParent || $expandCollapse) ? 'show' : ''; ?>"
                             aria-labelledby="heading<?php echo $parentMenuID; ?>" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <?php foreach ($childItemsByParent[$parentMenuID] as $childItem): ?>
@@ -120,7 +130,8 @@ function isActive($link)
                         </div>
                     <?php endif; ?>
                 </li>
-            <?php }
+                <?php
+            }
         }
     }
     ?>
